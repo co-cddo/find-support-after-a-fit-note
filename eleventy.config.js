@@ -1,3 +1,5 @@
+const isProduction = process.env.ELEVENTY_ENV === "production";
+
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 
 module.exports = async function (eleventyConfig) {
@@ -41,7 +43,7 @@ module.exports = async function (eleventyConfig) {
       layouts: "_layouts",
       data: "_data"
     },
-    pathPrefix: "/",
+    pathPrefix: isProduction ? "/find-support-after-a-fit-note/" : "/",
     templateFormats: ["md", "njk", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
