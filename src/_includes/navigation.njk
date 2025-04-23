@@ -4,7 +4,7 @@
 
 {% for entry in navItems %}
   {% set newItem = {
-    href: entry.url,
+    href: entry.url | absoluteUrl,
     text: entry.title,
     active: entry.url == page.url
   } %}

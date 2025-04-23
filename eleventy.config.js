@@ -1,4 +1,5 @@
 const isProduction = process.env.ELEVENTY_ENV === "production";
+const pathPrefix = isProduction ? "/find-support-after-a-fit-note/" : "/";
 
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 
@@ -26,6 +27,12 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/manifest.json": "assets/manifest.json" });
 
 
+  // Add a filter to join paths with the pathPrefix
+  eleventyConfig.addFilter("absoluteUrl", function(path) {
+    return `${pathPrefix || ""}${path}`.replace(/\/\/+/g, "/");
+  });
+
+
   // Filters
   require("./config/filters/merge-filter.js")(eleventyConfig);
   require("./config/filters/merge-objects.js")(eleventyConfig);
@@ -43,7 +50,7 @@ module.exports = async function (eleventyConfig) {
       layouts: "_layouts",
       data: "_data"
     },
-    pathPrefix: isProduction ? "/find-support-after-a-fit-note/" : "/",
+    pathPrefix,
     templateFormats: ["md", "njk", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",

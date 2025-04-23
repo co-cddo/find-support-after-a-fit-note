@@ -7,7 +7,7 @@
   {% set pagination = pagination | mergeObjects({
     previous: {
       labelText: previousPost.data.title,
-      href: previousPost.url
+      href: previousPost.url | absoluteUrl
     }
   }) %}
 {% endif %}
@@ -16,7 +16,7 @@
   {% set pagination = pagination | mergeObjects({
     next: {
       labelText: nextPost.data.title,
-      href: nextPost.url
+      href: nextPost.url | absoluteUrl
     }
   }) %}
 {% endif %}
