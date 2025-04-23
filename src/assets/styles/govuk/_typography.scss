@@ -1,0 +1,66 @@
+// --------------------------------
+
+// Typography
+
+// --------------------------------
+
+.govuk-prose {
+
+  h1:not([class]) {
+    @extend .govuk-heading-xl;
+  }
+
+  h2:not([class]) {
+    @extend .govuk-heading-l;
+  }
+
+  h3:not([class]) {
+    @extend .govuk-heading-m;
+  }
+
+  h4:not([class]) {
+    @extend .govuk-heading-s;
+  }
+
+  p {
+    @extend .govuk-body;
+  }
+
+  ul {
+    @extend .govuk-list;
+    @extend .govuk-list--bullet;
+  }
+
+  ol {
+    @extend .govuk-list;
+    @extend .govuk-list--number;
+  }
+
+  ul > ul {
+    @extend .govuk-list;
+    @extend .govuk-list--bullet;
+    margin-bottom: 0; // Reset margin bottom if nested ul’s
+  }
+
+  a {
+    @extend .govuk-link;
+    @extend .govuk-link--no-visited-state;
+  }
+
+  table {
+    @extend .govuk-table;
+  }
+
+  table thead {
+    @extend .govuk-table__header;
+  }
+
+  table thead th {
+    @extend .govuk-table__header;
+  }
+
+  table tbody td {
+    @extend .govuk-table__cell;
+  }
+
+}

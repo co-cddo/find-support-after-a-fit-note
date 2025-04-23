@@ -1,0 +1,102 @@
+.gem-c-related-navigation {
+  border-top: 2px solid govuk-colour("blue");
+  margin-bottom: govuk-spacing(9);
+  @include govuk-text-colour;
+}
+
+.gem-c-related-navigation__main-heading {
+  @include govuk-font(19, $weight: bold);
+  margin-top: govuk-spacing(3);
+  margin-bottom: govuk-spacing(2);
+}
+
+.gem-c-related-navigation__sub-heading {
+  @include govuk-font(16);
+  border-top: 1px solid govuk-colour("mid-grey");
+  margin: 0;
+  padding-top: govuk-spacing(3);
+}
+
+.gem-c-related-navigation__sub-heading--footer {
+  @include govuk-font(19, $weight: bold);
+  border-top: 0;
+  padding-top: 0;
+  margin-top: govuk-spacing(3);
+  margin-bottom: govuk-spacing(2);
+}
+
+.gem-c-related-navigation__main-heading + .gem-c-related-navigation__sub-heading {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.gem-c-related-navigation__sub-heading--other {
+  @include govuk-font(19, $weight: bold);
+  border-top: 0;
+  padding-top: 0;
+}
+
+.gem-c-related-navigation__nav-section {
+  margin-bottom: govuk-spacing(6);
+}
+
+.gem-c-related-navigation__link {
+  @include govuk-font($size: 16, $weight: regular, $line-height: 1.45);
+  list-style-type: none;
+  margin-top: govuk-spacing(3);
+
+  @include govuk-media-query($from: tablet) {
+    line-height: 1.28;
+  }
+}
+
+.gem-c-related-navigation__link--truncated-links {
+  margin-top: govuk-spacing(2);
+}
+
+.gem-c-related-navigation__toggle {
+  display: none;
+  @include govuk-link-common;
+  @include govuk-link-style-no-visited-state;
+
+  .govuk-frontend-supported & {
+    display: inline-block;
+  }
+
+}
+
+.gem-c-related-navigation__section-link {
+  font-weight: bold;
+}
+
+.gem-c-related-navigation__section-link--other {
+  font-weight: normal;
+}
+
+.gem-c-related-navigation__section-link--inline {
+  line-height: 1.45;
+}
+
+// reset the default browser styles
+.gem-c-related-navigation__link-list {
+  list-style: none;
+  margin: 0;
+  margin-bottom: 1.25em;
+  padding: 0;
+}
+
+.gem-c-related-navigation__toggle-more {
+
+  .gem-c-related-navigation__section-link {
+    @include govuk-media-query($from: tablet) {
+      line-height: 1.45;
+    }
+  }
+
+  &.js-hidden {
+    .govuk-frontend-supported & {
+      display: none;
+    }
+  }
+
+}

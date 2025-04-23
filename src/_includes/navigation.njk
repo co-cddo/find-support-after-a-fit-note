@@ -1,0 +1,14 @@
+{% set navItems = collections.fitnote | eleventyNavigation %}
+
+{% set items = [] %}
+
+{% for entry in navItems %}
+  {% set newItem = {
+    href: entry.url,
+    text: entry.title,
+    active: entry.url == page.url
+  } %}
+  {% set items = items | merge([newItem]) %}
+{% endfor %}
+
+{{ govukContentsList({ items: items }) }}

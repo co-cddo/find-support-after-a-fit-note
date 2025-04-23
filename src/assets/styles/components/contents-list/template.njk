@@ -1,0 +1,23 @@
+<nav class="gem-c-contents-list govuk-!-margin-bottom-4{% if params.classes %} {{ params.classes }}{% endif %}" aria-label="Contents">
+
+  <h2 class="gem-c-contents-list__title">Contents</h2>
+
+  <ol class="gem-c-contents-list__list">
+
+    {% for item in params.items %}
+    <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed"{% if item.active %} aria-current="true"{% endif %}>
+
+      <span class="gem-c-contents-list__list-item-dash" aria-hidden="true"></span>
+
+      {% if item.active %}
+        {{ item.text }}
+      {% else %}
+        <a class="gem-c-contents-list__link govuk-link govuk-link--no-visited-state gem-c-force-print-link-styles" href="{{ item.href }}">{{ item.text }}</a>
+      {% endif %}
+
+    </li>
+    {% endfor %}
+
+  </ol>
+
+</nav>

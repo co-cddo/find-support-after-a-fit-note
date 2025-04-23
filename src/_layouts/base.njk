@@ -1,0 +1,101 @@
+{# GOVUK components #}
+{%- from "govuk-components.njk" import govukComponent -%}
+
+{# Additional GOVUK components #}
+{%- from "src/assets/styles/components/contents-list/macro.njk" import govukContentsList -%}
+{%- from "src/assets/styles/components/related-navigation/macro.njk" import govukRelatedNavigation -%}
+{%- from "src/assets/styles/components/contextual-footer/macro.njk" import govukContextualFooter -%}
+
+<!DOCTYPE html>
+<html lang="{{ htmlLang | default("en", true) }}" class="govuk-template {%- if htmlClasses %} {{ htmlClasses }}{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ meta.serviceName }} - {{ meta.siteName }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="{{ themeColor | default("#0b0c0c", true) }}">
+
+  {# Block search engines #}
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  {% block headIcons %}
+    <link rel="icon" sizes="48x48" href="{{ assetPath | default("/assets", true) }}/images/favicon.ico">
+    <link rel="icon" sizes="any" href="{{ assetPath | default("/assets", true) }}/images/favicon.svg" type="image/svg+xml">
+    <link rel="mask-icon" href="{{ assetPath | default("/assets", true) }}/images/govuk-icon-mask.svg" color="{{ themeColor | default("#0b0c0c") }}">
+    <link rel="apple-touch-icon" href="{{ assetPath | default("/assets", true) }}/images/govuk-icon-180.png">
+    <link rel="manifest" href="{{ assetPath | default("/assets", true) }}/manifest.json">
+  {% endblock %}
+
+  {% block head %}{% endblock %}
+
+  {# OpenGraph images needs to be absolute, so we need either a URL for the image or for assetUrl to be set #}
+  {% if opengraphImageUrl or assetUrl %}
+  <meta property="og:image" content="{{ opengraphImageUrl | default(assetUrl + "/images/govuk-opengraph-image.png", true) }}">
+  {% endif %}
+
+  {# Site stylesheet #}
+	<link rel="stylesheet" href="{{ '/assets/styles/app.css' | url }}">
+
+</head>
+
+<body class="govuk-template__body">
+
+  <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+
+  {# Don’t show cookies banner if on the Cookies page #}
+  {% if page.url != "/cookies/" %}
+    {% include "cookie-banner.njk" ignore missing %}
+  {% endif %}
+
+  {{ govukComponent("skip-link", {
+    text: "Skip to main content",
+    href: "#main-content"
+  }) }}
+
+  {% block header %}
+    {{ govukComponent("header", {
+      homepageUrl: "https://gov.uk/"
+    }) }}
+  {% endblock %}
+
+  <div class="govuk-width-container">
+
+    {{ govukComponent("phase-banner", {
+      tag: {
+        text: "Prototype"
+      },
+      html: "This is a prototype for research purposes only. Please help us improve it by <a class=\"govuk-link govuk-link--no-visited-state\" href=\"#0\">sharing your feedback</a>."
+    }) }}
+
+  </div>
+
+  {% block main %}
+    <div class="govuk-width-container {%- if containerClasses %} {{ containerClasses }}{% endif %}">
+      {% block beforeContent %}{% endblock %}
+      <main class="govuk-main-wrapper {%- if mainClasses %} {{ mainClasses }}{% endif %}" id="main-content" {%- if mainLang %} lang="{{ mainLang }}"{% endif %}>
+        {% block content %}{% endblock %}
+      </main>      
+    </div>
+  {% endblock %}
+
+  {% block footer %}
+    {{ govukComponent("footer", {
+        meta: {
+        html: "<p class=\"govuk-body-s\">This is a prototype used for research and testing only. It is confidential and not for public sharing.</p>",
+        items: [
+          {
+            href: "/cookies/",
+            text: "Cookies"
+          },
+          {
+            href: "/accessibility-statement/",
+            text: "Accessibility statement"
+          }
+        ]
+      }
+    }) }}
+  {% endblock %}
+  
+  {% block bodyEnd %}{% endblock %}
+  </body>
+</html>

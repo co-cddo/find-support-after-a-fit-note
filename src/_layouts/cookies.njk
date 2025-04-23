@@ -1,0 +1,36 @@
+{% extends "./base.njk" %}
+
+{% block beforeContent %}
+
+  {% if breadcrumbs != false %}
+    {{ govukComponent("breadcrumbs", {
+      items: [
+        {
+          text: "Home",
+          href: "/"
+        }
+      ]
+    }) }}
+  {% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% include "cookie-success.njk" ignore missing %}
+      
+      <div class="govuk-prose">
+        {{ content | safe }}
+      </div>
+
+      {% include "cookie-form.njk" ignore missing %}
+
+    </div>
+
+  </div>
+
+{% endblock %}

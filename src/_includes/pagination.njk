@@ -1,0 +1,24 @@
+{% set previousPost = collections.fitnote | getPreviousCollectionItem %}
+{% set nextPost = collections.fitnote | getNextCollectionItem %}
+
+{% set pagination = {} %}
+
+{% if previousPost %}
+  {% set pagination = pagination | mergeObjects({
+    previous: {
+      labelText: previousPost.data.title,
+      href: previousPost.url
+    }
+  }) %}
+{% endif %}
+
+{% if nextPost %}
+  {% set pagination = pagination | mergeObjects({
+    next: {
+      labelText: nextPost.data.title,
+      href: nextPost.url
+    }
+  }) %}
+{% endif %}
+
+{{ govukComponent("pagination", pagination) }}

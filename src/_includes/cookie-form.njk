@@ -1,0 +1,29 @@
+<form class="cookie-preferences-form">
+
+  {{ govukComponent("radios", {
+    name: "analytics",
+    fieldset: {
+      legend: {
+        text: "Do you want to accept analytics cookies?"
+      }
+    },
+    items: [
+      {
+        value: "on",
+        html: 'Yes<span class="govuk-visually-hidden"> I want to accept analytics cookies</span>',
+        id: "analytics-on"
+      },
+      {
+        value: "off",
+        html: 'No<span class="govuk-visually-hidden"> I do not want to accept analytics cookies</span>',
+        id: "analytics-off"
+      }
+    ]
+  }) }}
+
+  {{ govukComponent("button", {
+    text: "Save cookie settings",
+    type: "submit"
+  }) }}
+
+</form>

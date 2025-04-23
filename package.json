@@ -1,0 +1,27 @@
+{
+  "name": "find-support-after-a-fit-note",
+  "version": "1.0.0",
+  "description": "",
+  "main": "eleventy.config.js",
+  "scripts": {
+      "start": "cross-env ELEVENTY_ENV=development npm-run-all clean watch:eleventy",
+      "build": "cross-env ELEVENTY_ENV=production npm-run-all clean --parallel build:eleventy --serial purgecss",
+      "build:eleventy": "eleventy",
+      "watch:eleventy": "eleventy --serve",
+      "clean": "rimraf public/"
+  },
+  "author": "Trevor Saint",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "3.0.0",
+    "@11ty/eleventy-navigation": "1.0.4",
+    "autoprefixer": "10.4.21",
+    "esbuild": "0.25.2",
+    "esbuild-sass-plugin": "3.3.1",
+    "govuk-frontend": "5.9.0",
+    "html-minifier-terser": "^7.2.0",
+    "postcss": "8.5.3",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.5.0"
+  }
+}

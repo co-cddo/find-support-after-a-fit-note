@@ -1,0 +1,34 @@
+<div class="gem-c-related-navigation govuk-!-display-none-print{% if params.classes %} {{ params.classes }}{% endif %}">
+
+  <h2 class="gem-c-related-navigation__main-heading" id="related-nav-related_items">{{ params.title }}</h2>
+
+  {% if params.links %}
+    <nav class="gem-c-related-navigation__nav-section" aria-labelledby="related-nav-related_items">
+      <ul class="gem-c-related-navigation__link-list">
+        {% for link in params.links %}
+          <li class="gem-c-related-navigation__link">
+            <a class="govuk-link govuk-link--no-visited-state gem-c-related-navigation__section-link govuk-link" href="{{ link.href }}">
+              {{ link.text }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+
+  {% for section in params.sections %}
+    <nav class="gem-c-related-navigation__nav-section" aria-labelledby="related-nav-{{ section.id }}">
+      <h3 id="related-nav-{{ section.id }}" class="gem-c-related-navigation__sub-heading">{{ section.heading }}</h3>
+      <ul class="gem-c-related-navigation__link-list">
+        {% for link in section.links %}
+          <li class="gem-c-related-navigation__link">
+            <a class="govuk-link govuk-link--no-visited-state gem-c-related-navigation__section-link" href="{{ link.href }}">
+              {{ link.text }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endfor %}
+
+</div>
