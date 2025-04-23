@@ -27,6 +27,9 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/manifest.json": "assets/manifest.json" });
 
 
+  eleventyConfig.addGlobalData("pathPrefix", process.env.ELEVENTY_ENV === "production" ? "/find-support-after-a-fit-note" : "");
+
+
   // Add a filter to join paths with the pathPrefix
   eleventyConfig.addFilter("absoluteUrl", function(path) {
     return `${pathPrefix || ""}${path}`.replace(/\/\/+/g, "/");

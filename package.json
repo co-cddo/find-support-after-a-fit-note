@@ -4,8 +4,9 @@
   "description": "Get help if you’re taking time off work due to a health condition",
   "main": "eleventy.config.js",
   "scripts": {
+    "build:scss-env": "node scripts/build-env-scss.js",
     "start": "cross-env ELEVENTY_ENV=development npm-run-all clean watch:eleventy",
-    "build": "cross-env ELEVENTY_ENV=production npm-run-all clean --parallel build:eleventy --serial purgecss",
+    "build": "cross-env ELEVENTY_ENV=production npm-run-all clean build:scss-env --parallel build:eleventy --serial purgecss",
     "build:eleventy": "eleventy",
     "watch:eleventy": "eleventy --serve",
     "clean": "rimraf public/",
