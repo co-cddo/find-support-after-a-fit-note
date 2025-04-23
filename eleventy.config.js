@@ -21,7 +21,8 @@ module.exports = async function (eleventyConfig) {
     "node_modules/govuk-frontend/dist/govuk/assets/fonts/": "assets/fonts"
   });
 
-  eleventyConfig.addPassthroughCopy({ "./src/assets/manifest.json": "assets" });
+  eleventyConfig.addPassthroughCopy({ "src/assets/manifest.json": "assets/manifest.json" });
+
 
   // Filters
   require("./config/filters/merge-filter.js")(eleventyConfig);
