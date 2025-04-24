@@ -8,7 +8,7 @@ module.exports = eleventyConfig => {
     return esbuild.build({
       target: "es2020",
       entryPoints: [
-        "./src/assets/scripts/app.js"
+        "./src/assets/scripts/cookie.js",
       ],
       outdir: "public/assets/scripts",
       minify: isProduction ? true : false,

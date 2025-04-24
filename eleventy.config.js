@@ -24,9 +24,16 @@ module.exports = async function (eleventyConfig) {
     "node_modules/govuk-frontend/dist/govuk/assets/fonts/": "assets/fonts"
   });
 
+
+  // Copy manifest file
   eleventyConfig.addPassthroughCopy({ "src/assets/manifest.json": "assets/manifest.json" });
 
 
+  // Copy cookie file
+  eleventyConfig.addPassthroughCopy({ "src/assets/scripts/cookie-manager.js": "assets/scripts/cookie-manager.js" });
+
+
+  // Fix path if inside a sub folder
   eleventyConfig.addGlobalData("pathPrefix", process.env.ELEVENTY_ENV === "production" ? "/find-support-after-a-fit-note" : "");
 
 
