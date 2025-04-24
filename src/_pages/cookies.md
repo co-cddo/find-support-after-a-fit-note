@@ -16,7 +16,7 @@ Essential cookies keep your information secure while you use the [Service Name].
 
 | Name                           | Purpose                            | Expires                     |
 |--------------------------------|------------------------------------|-----------------------------|
-| cookies_preference             | Saves your cookie consent settings | 1 year                      |
+| cookies_preferences            | Saves your cookie consent settings | 1 year                      |
 
 ## Analytics cookies (optional)
 

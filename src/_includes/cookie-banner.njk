@@ -3,18 +3,31 @@
   <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
 {% endset %}
 
+{% set acceptHtml %}
+  <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link govuk-link--no-visited-state" href="{{ '/cookies/' | url }}">change your cookie settings</a> at any time.</p>
+{% endset %}
+
+{% set rejectHtml %}
+  <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link govuk-link--no-visited-state" href="{{ '/cookies/' | url }}">change your cookie settings</a> at any time.</p>
+{% endset %}
+
 {{ govukComponent("cookie-banner", {
+  classes: "cookie-banner",
   ariaLabel: "Cookies on [name of service]",
+  hidden: true,
   messages: [
     {
+      classes: "cookie-banner-message",
       headingText: "Cookies on [name of service]",
       html: html,
       actions: [
         {
+          classes: "cookie-banner-accept-button",
           text: "Accept analytics cookies",
           type: "button"
         },
         {
+          classes: "cookie-banner-reject-button",
           text: "Reject analytics cookies",
           type: "button"
         },
@@ -22,6 +35,30 @@
           classes: "govuk-link--no-visited-state",
           text: "View cookies",
           href: "/cookies/" | absoluteUrl
+        }
+      ]
+    },
+    {
+      classes: "cookie-banner-accept-message",
+      html: acceptHtml,
+      role: "alert",
+      hidden: true,
+      actions: [
+        {
+          classes: "cookie-banner-hide-button",
+          text: "Hide this message"
+        }
+      ]
+    },
+    {
+      classes: "cookie-banner-reject-message",
+      html: rejectHtml,
+      role: "alert",
+      hidden: true,
+      actions: [
+        {
+          classes: "cookie-banner-hide-button",
+          text: "Hide this message"
         }
       ]
     }

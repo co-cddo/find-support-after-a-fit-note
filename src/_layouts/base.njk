@@ -31,6 +31,11 @@
   {# Site stylesheet #}
 	<link rel="stylesheet" href="{{ '/assets/styles/app.css' | url }}">
 
+  {# Cookies in production #}
+  {% if (meta.siteEnvironment === "production") %}
+    <script rel="preload" src="https://googletagmanager.com/gtag/js?id=G-LCRPJR51P6" defer></script>
+  {% endif %}
+
 </head>
 
 <body class="govuk-template__body">
@@ -90,7 +95,14 @@
       }
     }) }}
   {% endblock %}
+
+  {# Cookies in production #}
+  {% if (meta.siteEnvironment === "production") %}
+    <script src="{{ '/assets/scripts/cookie-manager.js' | url }}"></script>
+    <script src="{{ '/assets/scripts/cookie.js' | url }}"></script>
+  {% endif %}
   
   {% block bodyEnd %}{% endblock %}
+
   </body>
 </html>
