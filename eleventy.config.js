@@ -30,6 +30,14 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addGlobalData("pathPrefix", process.env.ELEVENTY_ENV === "production" ? "/find-support-after-a-fit-note" : "");
 
 
+  // Link path in markdown
+  eleventyConfig.addShortcode("link", function(path, label) {
+    const pathPrefix = this.ctx.pathPrefix || "";
+    const fullPath = `${pathPrefix}${path}`.replace(/\/{2,}/g, "/");
+    return `<a href="${fullPath}">${label}</a>`;
+  });
+
+
   // Add a filter to join paths with the pathPrefix
   eleventyConfig.addFilter("absoluteUrl", function(path) {
     return `${pathPrefix || ""}${path}`.replace(/\/\/+/g, "/");

@@ -8,6 +8,7 @@ const isProduction = process.env.ELEVENTY_ENV === "production";
 module.exports = eleventyConfig => {
 
   eleventyConfig.on("afterBuild", () => {
+    
     // Set the pathPrefix for the production environment
     const pathPrefix = isProduction ? "/find-support-after-a-fit-note" : "";
 
@@ -24,6 +25,7 @@ module.exports = eleventyConfig => {
         }
       })],
       define: {
+        
         // Inject pathPrefix into the SCSS build process
         $pathPrefix: JSON.stringify(pathPrefix),
       },
