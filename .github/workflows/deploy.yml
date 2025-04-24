@@ -3,6 +3,7 @@ name: Deploy site to GitHub Pages
 on:
   release:
     types: [published]  # Trigger only when a GitHub Release is published
+  workflow_dispatch:  # Allows manual triggering from the GitHub Actions UI
 
 jobs:
   build-and-deploy:
