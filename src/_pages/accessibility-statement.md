@@ -38,4 +38,4 @@ This website is fully compliant with the [Web Content Accessibility Guidelines v
 
 This statement was prepared on 23 April 2024.
 
-If you have questions or suggestions, [send us your feedback](#0).
+If you have questions or suggestions, [send us your feedback](mailto:health-work-research@digital.cabinet-office.gov.uk).
