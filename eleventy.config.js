@@ -1,11 +1,13 @@
 const isProduction = process.env.ELEVENTY_ENV === "production";
-const pathPrefix = isProduction ? "/find-support-after-a-fit-note/" : "/";
 
+const pathPrefix = isProduction ? "/find-support-after-a-fit-note/" : "/";
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 
 module.exports = async function (eleventyConfig) {
 
+
   const { IdAttributePlugin } = await import("@11ty/eleventy");
+
 
   // Add IDs for headings
   eleventyConfig.addPlugin(IdAttributePlugin, {
@@ -15,8 +17,10 @@ module.exports = async function (eleventyConfig) {
 		slugify: eleventyConfig.getFilter("slugify")
 	});
 
+
   // Navigation
   eleventyConfig.addPlugin(eleventyNavigationPlugin);
+
 
   // Copy GOVUK assets
   eleventyConfig.addPassthroughCopy({ 
@@ -55,10 +59,12 @@ module.exports = async function (eleventyConfig) {
   require("./config/filters/merge-filter.js")(eleventyConfig);
   require("./config/filters/merge-objects.js")(eleventyConfig);
 
+
   // Plugins
   eleventyConfig.addPlugin(require("./config/plugins/scss-config.js"));
   eleventyConfig.addPlugin(require("./config/plugins/html-config.js"));
   eleventyConfig.addPlugin(require("./config/plugins/js-config.js"));
+
 
   return {
     dir: {
@@ -74,5 +80,6 @@ module.exports = async function (eleventyConfig) {
     htmlTemplateEngine: "njk",
     dataTemplateEngine: "njk"
   }
+
 
 };

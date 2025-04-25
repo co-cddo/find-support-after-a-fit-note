@@ -29,11 +29,13 @@
   ul {
     @extend .govuk-list;
     @extend .govuk-list--bullet;
+    @extend .govuk-list--spaced;
   }
 
   ol {
     @extend .govuk-list;
     @extend .govuk-list--number;
+    @extend .govuk-list--spaced;
   }
 
   ul > ul {
