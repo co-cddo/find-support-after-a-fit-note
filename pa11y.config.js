@@ -28,7 +28,10 @@ module.exports = {
   level: "error",
   defaults: {
     timeout: 5000,
-    threshold: 2
+    threshold: 2,
+    browserOptions: {
+      args: ['--no-sandbox', '--disable-setuid-sandbox']  // Added arguments for sandboxing issue
+    }
   },
   urls: getHtmlFiles(path.join(__dirname, "public"))
 };

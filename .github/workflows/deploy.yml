@@ -41,6 +41,9 @@ jobs:
         run: npm run test:pa11y
         env:
           BASE_URL: ${{ secrets.BASE_URL }}  # Use live URL set previously
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable  # Path to Chromium
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true  # Skip downloading Chromium
+          PUPPETEER_ARGS: "--no-sandbox --disable-setuid-sandbox"  # Bypass sandbox issue
 
       - name: Save Pa11y Report
         run: mv pa11y-report.json $GITHUB_WORKSPACE/pa11y-report.json
