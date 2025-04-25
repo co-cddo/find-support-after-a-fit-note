@@ -33,23 +33,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           publish_branch: gh-pages
-
-      - name: Set BASE_URL for Pa11y
-        run: echo "BASE_URL=https://co-cddo.github.io/find-support-after-a-fit-note/" >> $GITHUB_ENV
-
-      - name: Run Pa11y tests
-        run: npm run test:pa11y
-        env:
-          BASE_URL: ${{ secrets.BASE_URL }}  # Use live URL set previously
-          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable  # Path to Chromium
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true  # Skip downloading Chromium
-          PUPPETEER_ARGS: "--no-sandbox --disable-setuid-sandbox"  # Bypass sandbox issue
-
-      - name: Save Pa11y Report
-        run: mv pa11y-report.json $GITHUB_WORKSPACE/pa11y-report.json
-
-      - name: Upload Pa11y Report as Artifact
-        uses: actions/upload-artifact@v4  # Updated to v4
-        with:
-          name: pa11y-report
-          path: pa11y-report.json

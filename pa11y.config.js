@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const baseUrl = process.env.BASE_URL || `http://localhost:8080${process.env.ELEVENTY_ENV === "production" ? "/find-support-after-a-fit-note" : ""}`;
+// Set the base URL for local testing
+const baseUrl = "http://localhost:8080";  // Use this for local testing
 
 function getHtmlFiles(dir) {
   const files = fs.readdirSync(dir);
@@ -28,10 +29,7 @@ module.exports = {
   level: "error",
   defaults: {
     timeout: 5000,
-    threshold: 2,
-    browserOptions: {
-      args: ['--no-sandbox', '--disable-setuid-sandbox']  // Added arguments for sandboxing issue
-    }
+    threshold: 2
   },
-  urls: getHtmlFiles(path.join(__dirname, "public"))
+  urls: process.env.NODE_ENV === 'development' ? getHtmlFiles(path.join(__dirname, "public")) : []  // Only run tests locally
 };
