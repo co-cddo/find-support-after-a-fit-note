@@ -46,7 +46,7 @@ jobs:
         run: mv pa11y-report.json $GITHUB_WORKSPACE/pa11y-report.json
 
       - name: Upload Pa11y Report as Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Updated to v3
         with:
           name: pa11y-report
           path: pa11y-report.json
