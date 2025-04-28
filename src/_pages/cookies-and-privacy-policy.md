@@ -1,3 +1,9 @@
+---
+layout: cookies.njk
+title: Cookies
+permalink: /cookies-and-privacy-policy/
+---
+
 # Cookies and privacy policy
 
 Cookies are small files saved on your phone, tablet or computer when you visit a website.
@@ -10,9 +16,9 @@ Essential cookies help keep the prototype running properly. We do not need to as
 
 **Essential cookies we use:**
 
-| Name | Purpose | Expires |
-|:-----|:--------|:--------|
-| cookies_preferences | Saves your cookie consent settings | 1 year |
+| Name                | Purpose                            | Expires |
+|---------------------|------------------------------------|---------|
+| cookies_preferences | Saves your cookie consent settings | 1 year  |
 
 ## Analytics cookies (optional)
 
@@ -28,10 +34,10 @@ This helps us understand what’s working well and what we could improve. Google
 
 **Analytics cookies we use:**
 
-| Name | Purpose | Expires |
-|:-----|:--------|:--------|
-| _ga | Helps us count how many people visit this website by tracking if you’ve visited before | 2 years |
-| _gid | Tracks an individual session on your device to understand user journeys | 24 hours |
+| Name | Purpose                                                                                | Expires  |
+|------|----------------------------------------------------------------------------------------|----------|
+| _ga  | Helps us count how many people visit this website by tracking if you’ve visited before | 2 years  |
+| _gid | Tracks an individual session on your device to understand user journeys                | 24 hours |
 
 ## Managing your cookie preferences
 
@@ -39,7 +45,7 @@ When you visit **Find support after a fit note**, we will ask if you want to acc
 
 Your preferences are stored using Google’s Consent Mode. This ensures that data is only collected if you agree.
 
-You can manage or withdraw your cookie preferences at any time by visiting the [cookies page](#).
+You can manage or withdraw your cookie preferences at any time.
 
 Please note: changes will only apply if you use the same browser and device and have not cleared your cookies.
 
