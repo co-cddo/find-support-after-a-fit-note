@@ -31,5 +31,5 @@ module.exports = {
     timeout: 5000,
     threshold: 2
   },
-  urls: process.env.NODE_ENV === 'development' ? getHtmlFiles(path.join(__dirname, "public")) : []  // Only run tests locally
+  urls: process.env.NODE_ENV === "development" ? getHtmlFiles(path.join(__dirname, "public")) : []  // Only run tests locally
 };

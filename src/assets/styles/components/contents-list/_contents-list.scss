@@ -1,10 +1,8 @@
-// @import "govuk_publishing_components/individual_component_support";
 @import "../mixins/govuk-template-link-focus-override";
 @import "../helpers/contents-list-helpers";
 
 .gem-c-contents-list {
-  // Always render the contents list above a
-  // back to contents link
+  // Always render the contents list above a back to contents link
   position: relative;
   z-index: 1;
   background: govuk-colour("white");
@@ -77,6 +75,7 @@
 }
 
 .gem-c-contents-list--alternative-line-style {
+
   .gem-c-contents-list__title {
     margin-bottom: govuk-spacing(3);
   }
@@ -97,9 +96,11 @@
     color: govuk-colour("blue");
     font-weight: $govuk-font-weight-bold;
   }
+
 }
 
 @include govuk-media-query($media-type: print) {
+
   // Override default browser indentation
   .gem-c-contents-list__list,
   .gem-c-contents-list__nested-list {
@@ -111,4 +112,5 @@
   .gem-c-contents-list__list-item--parent {
     list-style-type: none;
   }
+
 }

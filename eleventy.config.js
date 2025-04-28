@@ -22,19 +22,13 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addPlugin(eleventyNavigationPlugin);
 
 
-  // Copy GOVUK assets
+  // Copy GOVUK assets, manifest and cookie assets
   eleventyConfig.addPassthroughCopy({ 
     "node_modules/govuk-frontend/dist/govuk/assets/images/": "assets/images",
-    "node_modules/govuk-frontend/dist/govuk/assets/fonts/": "assets/fonts"
+    "node_modules/govuk-frontend/dist/govuk/assets/fonts/": "assets/fonts",
+    "src/assets/manifest.json": "assets/manifest.json",
+    "src/assets/scripts/cookie-manager.js": "assets/scripts/cookie-manager.js"
   });
-
-
-  // Copy manifest file
-  eleventyConfig.addPassthroughCopy({ "src/assets/manifest.json": "assets/manifest.json" });
-
-
-  // Copy cookie file
-  eleventyConfig.addPassthroughCopy({ "src/assets/scripts/cookie-manager.js": "assets/scripts/cookie-manager.js" });
 
 
   // Fix path if inside a sub folder
