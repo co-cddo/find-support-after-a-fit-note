@@ -4,7 +4,7 @@ module.exports = {
   siteEnvironment: process.env.ELEVENTY_ENV || "development",
 
   siteURL: isProduction
-    ? "https://co-cddo.github.io/find-support-after-a-fit-note/"
+    ? "https://co-cddo.github.io/find-support-after-a-fit-note"
     : "http://localhost:8080",
 
   serviceName: "Find support after a fit note",
