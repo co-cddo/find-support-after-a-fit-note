@@ -1,6 +1,7 @@
 {
   "short_name": "Find support after a fit note",
   "name": "Find support after a fit note",
+  "description": "Get help if you’re taking time off work due to a health condition",
   "lang": "en-GB",
   "dir": "ltr",
   "orientation": "any",
