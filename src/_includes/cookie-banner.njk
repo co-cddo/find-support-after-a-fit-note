@@ -4,11 +4,11 @@
 {% endset %}
 
 {% set acceptHtml %}
-  <p class="govuk-body">You’ve accepted additional cookies. You can <a class="govuk-link govuk-link--no-visited-state" href="{{ '/cookies/' | url }}">change your cookie settings</a> at any time.</p>
+  <p class="govuk-body">You’ve accepted additional cookies. You can <a class="govuk-link govuk-link--no-visited-state" href="{{ '/cookies-and-privacy-policy/' | url }}">change your cookie settings</a> at any time.</p>
 {% endset %}
 
 {% set rejectHtml %}
-  <p class="govuk-body">You’ve rejected additional cookies. You can <a class="govuk-link govuk-link--no-visited-state" href="{{ '/cookies/' | url }}">change your cookie settings</a> at any time.</p>
+  <p class="govuk-body">You’ve rejected additional cookies. You can <a class="govuk-link govuk-link--no-visited-state" href="{{ '/cookies-and-privacy-policy/' | url }}">change your cookie settings</a> at any time.</p>
 {% endset %}
 
 {{ govukComponent("cookie-banner", {
@@ -34,7 +34,7 @@
         {
           classes: "govuk-link--no-visited-state",
           text: "View cookies",
-          href: "/cookies/" | absoluteUrl
+          href: "/cookies-and-privacy-policy/" | absoluteUrl
         }
       ]
     },
