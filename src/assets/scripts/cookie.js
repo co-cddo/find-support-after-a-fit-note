@@ -20,7 +20,7 @@ var config = {
   userPreferences: {
     cookieName: "cookie-preferences",
     cookieExpiry: 365,
-    cookieSecure: location.protocol === "https:"
+    cookieSecure: location.protocol === "https:",
     cookieSameSite: "Lax"
   },
   preferencesForm: {
