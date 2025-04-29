@@ -6,6 +6,18 @@ const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 module.exports = async function (eleventyConfig) {
 
 
+  // Get previous and next
+  eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentPageUrl) {
+    const index = collection.findIndex(item => item.url === currentPageUrl);
+    return index > 0 ? collection[index - 1] : null;
+  });
+
+  eleventyConfig.addNunjucksFilter("getNextCollectionItem", function (collection, currentPageUrl) {
+    const index = collection.findIndex(item => item.url === currentPageUrl);
+    return index < collection.length - 1 ? collection[index + 1] : null;
+  });
+
+
   const { IdAttributePlugin } = await import("@11ty/eleventy");
 
 
