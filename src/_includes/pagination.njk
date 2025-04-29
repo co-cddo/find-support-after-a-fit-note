@@ -1,6 +1,5 @@
 {% set previousPost = collections.fitnote | getPreviousCollectionItem(page.url) %}
 {% set nextPost = collections.fitnote | getNextCollectionItem(page.url) %}
-
 {% set pagination = {} %}
 {% set siteURL = meta.siteURL %}
 
@@ -23,3 +22,7 @@
 {% endif %}
 
 {{ govukComponent("pagination", pagination) }}
+
+<p>Current page: {{ page.url }}</p>
+<p>Previous URL: {{ previousPost.url }}</p>
+<p>Next URL: {{ nextPost.url }}</p>

@@ -6,15 +6,25 @@ const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 module.exports = async function (eleventyConfig) {
 
 
-  // Get previous and next
-  eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentPageUrl) {
-    const index = collection.findIndex(item => item.url === currentPageUrl);
-    return index > 0 ? collection[index - 1] : null;
+  // Fitnote collection
+  eleventyConfig.addCollection("fitnote", function(collectionApi) {
+    return collectionApi.getFilteredByTag("fitnote").sort((a, b) => {
+      return a.data.eleventyNavigation.order - b.data.eleventyNavigation.order;
+    });
   });
 
-  eleventyConfig.addNunjucksFilter("getNextCollectionItem", function (collection, currentPageUrl) {
-    const index = collection.findIndex(item => item.url === currentPageUrl);
-    return index < collection.length - 1 ? collection[index + 1] : null;
+
+  // Get previous and next
+  eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentUrl) {
+    const index = collection.findIndex(item => item.url === currentUrl);
+    if (index > 0) return collection[index - 1];
+    return null;
+  });
+  
+  eleventyConfig.addNunjucksFilter("getNextCollectionItem", function (collection, currentUrl) {
+    const index = collection.findIndex(item => item.url === currentUrl);
+    if (index !== -1 && index < collection.length - 1) return collection[index + 1];
+    return null;
   });
 
 
