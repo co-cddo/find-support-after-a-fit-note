@@ -20,8 +20,8 @@ var config = {
   userPreferences: {
     cookieName: "cookie-preferences",
     cookieExpiry: 365,
-    cookieSecure: location.protocol === "https:",
-    cookieSameSite: "Lax",
+    cookieSecure: location.protocol === "https:"
+    cookieSameSite: "Lax"
   },
   preferencesForm: {
     class: "cookie-preferences-form"
@@ -33,12 +33,18 @@ var config = {
       {
         name: "accept",
         buttonClass: "cookie-banner-accept-button",
+        confirmationClass: "cookie-banner-accept-message",
         consent: true
       },
       {
         name: "reject",
         buttonClass: "cookie-banner-reject-button",
+        confirmationClass: "cookie-banner-reject-message",
         consent: false
+      },
+      {
+        name: "hide",
+        buttonClass: "cookie-banner-hide-button"
       }
     ]
   },
