@@ -2,9 +2,18 @@ const pathPrefix = process.env.ELEVENTY_PATH_PREFIX || "/";
 
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 
+// Clean URL function (defined early so it's available for use)
+function cleanUrl(currentUrl) {
+  if (currentUrl.includes("/preview/pr-")) {
+    return currentUrl;
+  } else if (process.env.ELEVENTY_PATH_PREFIX === "/find-support-after-a-fit-note/") {
+    return currentUrl.replace(/^\/find-support-after-a-fit-note\//, "/");
+  }
+  return currentUrl;
+}
+
 module.exports = async function (eleventyConfig) {
-  
-  // Make pathPrefix globally available in templates
+
   eleventyConfig.addGlobalData("pathPrefix", pathPrefix);
 
   // Fitnote collection
@@ -16,7 +25,6 @@ module.exports = async function (eleventyConfig) {
 
   // Filter for cleaning preview path prefix
   eleventyConfig.addNunjucksFilter("stripPreviewPrefix", function (url) {
-    // Only remove the preview path if not in preview
     if (process.env.ELEVENTY_PATH_PREFIX !== "/") {
       return url.replace(/^\/preview\/pr-\d+\//, "/");
     }
@@ -24,24 +32,22 @@ module.exports = async function (eleventyConfig) {
   });
 
   // Removes the trailing slash if it exists
-  eleventyConfig.addNunjucksFilter("trimSlash", function(path) {
+  eleventyConfig.addNunjucksFilter("trimSlash", function (path) {
     return path.replace(/\/$/, "");
   });
 
   // Get previous item in a collection
   eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentUrl) {
-    const cleanUrl = cleanUrl(currentUrl);
-    const index = collection.findIndex(item => item.url === cleanUrl);
-    if (index > 0) return collection[index - 1];
-    return null;
+    const targetUrl = cleanUrl(currentUrl);
+    const index = collection.findIndex(item => cleanUrl(item.url) === targetUrl);
+    return index > 0 ? collection[index - 1] : null;
   });
 
   // Get next item in a collection
   eleventyConfig.addNunjucksFilter("getNextCollectionItem", function (collection, currentUrl) {
-    const cleanUrl = cleanUrl(currentUrl);
-    const index = collection.findIndex(item => item.url === cleanUrl);
-    if (index !== -1 && index < collection.length - 1) return collection[index + 1];
-    return null;
+    const targetUrl = cleanUrl(currentUrl);
+    const index = collection.findIndex(item => cleanUrl(item.url) === targetUrl);
+    return (index !== -1 && index < collection.length - 1) ? collection[index + 1] : null;
   });
 
   // Add heading IDs
@@ -75,16 +81,15 @@ module.exports = async function (eleventyConfig) {
   });
 
   // Custom filter to add preview path prefix for relative URLs
-  eleventyConfig.addFilter("addPreviewPathPrefix", function(url) {
-    // Check if the URL is relative and add the pathPrefix
+  eleventyConfig.addFilter("addPreviewPathPrefix", function (url) {
     if (!/^https?:\/\//.test(url)) {
-      return `${pathPrefix.replace(/\/$/, "")}/preview/pr-9${url}`; // Assumes "pr-9" is the preview path you need
+      return `${pathPrefix.replace(/\/$/, "")}/preview/pr-9${url}`;
     }
-    return url; // If it's an absolute URL, return it as is
+    return url;
   });
 
   // Apply the preview path prefix to all links in markdown content
-  eleventyConfig.addFilter("applyPreviewPathPrefixToLinks", function(content) {
+  eleventyConfig.addFilter("applyPreviewPathPrefixToLinks", function (content) {
     return content.replace(/href="([^"]+)"/g, (match, url) => {
       return `href="${eleventyConfig.filters.addPreviewPathPrefix(url)}"`;
     });
@@ -114,19 +119,3 @@ module.exports = async function (eleventyConfig) {
     dataTemplateEngine: "njk"
   };
 };
-
-// Function to clean URLs based on environment
-function cleanUrl(currentUrl) {
-  // For preview environments (e.g., /preview/pr-2/), retain the prefix
-  if (currentUrl.includes("/preview/pr-")) {
-    return currentUrl; // Keep the preview path as is
-  }
-  
-  // For live (production) environment, remove the /find-support-after-a-fit-note/ prefix
-  else if (process.env.ELEVENTY_PATH_PREFIX === "/find-support-after-a-fit-note/") {
-    return currentUrl.replace(/^\/find-support-after-a-fit-note\//, "/");
-  }
-
-  // For local environments, no change to the URL
-  return currentUrl;
-}
