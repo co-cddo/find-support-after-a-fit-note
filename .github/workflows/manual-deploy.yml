@@ -1,0 +1,102 @@
+name: Manual deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create GitHub release after deploy?'
+        required: true
+        default: 'False'
+        type: choice
+        options:
+          - 'False'
+          - 'True'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fail if on a preview branch
+        if: startsWith(github.ref, 'refs/heads/preview/')
+        run: |
+          echo "❌ This workflow should not run on a preview branch."
+          exit 1
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site for production
+        run: npm run build
+        env:
+          ELEVENTY_PATH_PREFIX: "/find-support-after-a-fit-note/"
+
+      - name: Deploy to GitHub Pages (live)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          destination_dir: .
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 || echo "v1.0.0")  # Default to v1.0.0 if no tags exist
+          log=$(git log "$latest_tag"..HEAD --pretty=format:"- %s")
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$log" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Bump version and update package.json
+        id: bump
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 || echo "v1.0.0")  # Default to v1.0.0 if no tags exist
+          IFS='.' read -r major minor patch <<<"${latest_tag#v}"
+          patch=$((patch + 1))
+          new_version="v$major.$minor.$patch"
+          
+          # Update package.json version
+          jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
+          echo "Updated package.json version to $new_version"
+          
+          # Set version as output so we can use it in other steps
+          echo "new_version=$new_version" >> $GITHUB_ENV
+
+      - name: Install dependencies and update package-lock.json
+        run: |
+          npm install  # This updates package-lock.json
+
+      - name: Commit version bump and package-lock.json update
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add package.json package-lock.json  # Add both package.json and package-lock.json
+          git commit -m "Bump version to ${{ env.new_version }} and update package-lock.json"
+          git push origin main
+
+      - name: Create GitHub Release (optional)
+        if: ${{ github.event.inputs.create_release == 'True' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.new_version }}
+          name: Release ${{ env.new_version }}
+          body: |
+            Automatic release triggered via manual deploy.
+            Changelog:
+            ${{ steps.changelog.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

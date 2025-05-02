@@ -7,6 +7,7 @@
     "build:scss-env": "node scripts/build-env-scss.js",
     "start": "cross-env ELEVENTY_ENV=development npm-run-all clean watch:eleventy",
     "build": "cross-env ELEVENTY_ENV=production npm-run-all clean build:scss-env build:eleventy purgecss",
+    "build:preview": "cross-env ELEVENTY_ENV=preview npm-run-all clean build:eleventy",
     "build:eleventy": "eleventy",
     "watch:eleventy": "eleventy --serve",
     "clean": "rimraf public/",

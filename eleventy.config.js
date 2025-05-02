@@ -1,9 +1,15 @@
-const isProduction = process.env.ELEVENTY_ENV === "production";
+// const isProduction = process.env.ELEVENTY_ENV === "production";
+// const pathPrefix = isProduction ? "/find-support-after-a-fit-note/" : "/";
 
-const pathPrefix = isProduction ? "/find-support-after-a-fit-note/" : "/";
+const pathPrefix = process.env.ELEVENTY_PATH_PREFIX || "/";
+
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 
 module.exports = async function (eleventyConfig) {
+
+
+  // Make pathPrefix globally available in my templates
+  eleventyConfig.addGlobalData("pathPrefix", pathPrefix);
 
 
   // Fitnote collection
@@ -54,7 +60,7 @@ module.exports = async function (eleventyConfig) {
 
 
   // Fix path if inside a sub folder
-  eleventyConfig.addGlobalData("pathPrefix", process.env.ELEVENTY_ENV === "production" ? "/find-support-after-a-fit-note" : "");
+  // eleventyConfig.addGlobalData("pathPrefix", process.env.ELEVENTY_ENV === "production" ? "/find-support-after-a-fit-note" : "");
 
 
   // Link path in markdown
