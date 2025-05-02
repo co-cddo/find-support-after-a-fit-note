@@ -14,9 +14,13 @@ module.exports = async function (eleventyConfig) {
     });
   });
 
-  // Filters for previous and next navigation, cleaning preview prefix
+  // Filter for cleaning preview path prefix
   eleventyConfig.addNunjucksFilter("stripPreviewPrefix", function (url) {
-    return url.replace(/^\/preview\/pr-\d+\//, "/");
+    // Only remove the preview path if not in preview
+    if (process.env.ELEVENTY_PATH_PREFIX !== "/") {
+      return url.replace(/^\/preview\/pr-\d+\//, "/");
+    }
+    return url;
   });
 
   // Removes the trailing slash if it exists
@@ -24,15 +28,17 @@ module.exports = async function (eleventyConfig) {
     return path.replace(/\/$/, "");
   });
 
+  // Get previous item in a collection
   eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentUrl) {
-    const cleanUrl = currentUrl.replace(/^\/preview\/pr-\d+\//, "/");
+    const cleanUrl = cleanUrl(currentUrl);
     const index = collection.findIndex(item => item.url === cleanUrl);
     if (index > 0) return collection[index - 1];
     return null;
   });
 
+  // Get next item in a collection
   eleventyConfig.addNunjucksFilter("getNextCollectionItem", function (collection, currentUrl) {
-    const cleanUrl = currentUrl.replace(/^\/preview\/pr-\d+\//, "/");
+    const cleanUrl = cleanUrl(currentUrl);
     const index = collection.findIndex(item => item.url === cleanUrl);
     if (index !== -1 && index < collection.length - 1) return collection[index + 1];
     return null;
@@ -108,3 +114,19 @@ module.exports = async function (eleventyConfig) {
     dataTemplateEngine: "njk"
   };
 };
+
+// Function to clean URLs based on environment
+function cleanUrl(currentUrl) {
+  // For preview environments (e.g., /preview/pr-2/), retain the prefix
+  if (currentUrl.includes("/preview/pr-")) {
+    return currentUrl; // Keep the preview path as is
+  }
+  
+  // For live (production) environment, remove the /find-support-after-a-fit-note/ prefix
+  else if (process.env.ELEVENTY_PATH_PREFIX === "/find-support-after-a-fit-note/") {
+    return currentUrl.replace(/^\/find-support-after-a-fit-note\//, "/");
+  }
+
+  // For local environments, no change to the URL
+  return currentUrl;
+}
