@@ -68,19 +68,19 @@ module.exports = async function (eleventyConfig) {
     return `${pathPrefix}${path}`.replace(/\/{2,}/g, "/");
   });
 
-  // Custom filter to automatically add pathPrefix to relative URLs
-  eleventyConfig.addFilter("addPathPrefix", function(url) {
-    // Only add pathPrefix to relative URLs (URLs that don't start with http:// or https://)
+  // Custom filter to add preview path prefix for relative URLs
+  eleventyConfig.addFilter("addPreviewPathPrefix", function(url) {
+    // Check if the URL is relative and add the pathPrefix
     if (!/^https?:\/\//.test(url)) {
-      return (pathPrefix || "") + url;
+      return `${pathPrefix.replace(/\/$/, "")}/preview/pr-9${url}`; // Assumes "pr-9" is the preview path you need
     }
-    return url; // If it's an absolute URL, don't modify it
+    return url; // If it's an absolute URL, return it as is
   });
 
-  // Apply the pathPrefix filter to all links in markdown content automatically
-  eleventyConfig.addFilter("applyPathPrefixToLinks", function(content) {
+  // Apply the preview path prefix to all links in markdown content
+  eleventyConfig.addFilter("applyPreviewPathPrefixToLinks", function(content) {
     return content.replace(/href="([^"]+)"/g, (match, url) => {
-      return `href="${url | addPathPrefix}"`;
+      return `href="${eleventyConfig.filters.addPreviewPathPrefix(url)}"`;
     });
   });
 
