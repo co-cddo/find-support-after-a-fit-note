@@ -19,6 +19,11 @@ module.exports = async function (eleventyConfig) {
     return url.replace(/^\/preview\/pr-\d+\//, "/");
   });
 
+  // Removes the trailing slash if it exists
+  eleventyConfig.addNunjucksFilter("trimSlash", function(path) {
+    return path.replace(/\/$/, "");
+  });
+
   eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentUrl) {
     const cleanUrl = currentUrl.replace(/^\/preview\/pr-\d+\//, "/");
     const index = collection.findIndex(item => item.url === cleanUrl);
@@ -61,6 +66,22 @@ module.exports = async function (eleventyConfig) {
   // Filter to join paths with pathPrefix
   eleventyConfig.addFilter("absoluteUrl", function (path) {
     return `${pathPrefix}${path}`.replace(/\/{2,}/g, "/");
+  });
+
+  // Custom filter to automatically add pathPrefix to relative URLs
+  eleventyConfig.addFilter("addPathPrefix", function(url) {
+    // Only add pathPrefix to relative URLs (URLs that don't start with http:// or https://)
+    if (!/^https?:\/\//.test(url)) {
+      return (pathPrefix || "") + url;
+    }
+    return url; // If it's an absolute URL, don't modify it
+  });
+
+  // Apply the pathPrefix filter to all links in markdown content automatically
+  eleventyConfig.addFilter("applyPathPrefixToLinks", function(content) {
+    return content.replace(/href="([^"]+)"/g, (match, url) => {
+      return `href="${url | addPathPrefix}"`;
+    });
   });
 
   // Custom filters
