@@ -21,14 +21,20 @@ module.exports = async function (eleventyConfig) {
 
 
   // Get previous and next
+  eleventyConfig.addNunjucksFilter("stripPreviewPrefix", function(url) {
+    return url.replace(/^\/preview\/pr-\d+\//, "/");
+  });
+
   eleventyConfig.addNunjucksFilter("getPreviousCollectionItem", function (collection, currentUrl) {
-    const index = collection.findIndex(item => item.url === currentUrl);
+    const cleanUrl = currentUrl.replace(/^\/preview\/pr-\d+\//, "/");
+    const index = collection.findIndex(item => item.url === cleanUrl);
     if (index > 0) return collection[index - 1];
     return null;
   });
   
   eleventyConfig.addNunjucksFilter("getNextCollectionItem", function (collection, currentUrl) {
-    const index = collection.findIndex(item => item.url === currentUrl);
+    const cleanUrl = currentUrl.replace(/^\/preview\/pr-\d+\//, "/");
+    const index = collection.findIndex(item => item.url === cleanUrl);
     if (index !== -1 && index < collection.length - 1) return collection[index + 1];
     return null;
   });
