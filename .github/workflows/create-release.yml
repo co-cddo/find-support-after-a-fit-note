@@ -41,9 +41,9 @@ jobs:
             const merged = prs.data.find(pr => pr.merged_at);
             const labels = merged?.labels?.map(l => l.name) || [];
             core.setOutput('labels', labels.join(','));
-            core.setOutput('label_major', labels.includes('release:major'));
-            core.setOutput('label_minor', labels.includes('release:minor'));
-            core.setOutput('label_patch', labels.includes('release:patch'));
+            core.setOutput('label_major', labels.includes('major'));
+            core.setOutput('label_minor', labels.includes('minor'));
+            core.setOutput('label_patch', labels.includes('patch'));
 
       - name: Determine next version
         id: bump
