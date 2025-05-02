@@ -1,13 +1,12 @@
 {% set previousPost = collections.fitnote | getPreviousCollectionItem(page.url) %}
 {% set nextPost = collections.fitnote | getNextCollectionItem(page.url) %}
 {% set pagination = {} %}
-{% set siteURL = meta.siteURL %}
 
 {% if previousPost %}
   {% set pagination = pagination | mergeObjects({
     previous: {
       labelText: previousPost.data.title,
-      href: siteURL + previousPost.url
+      href: pathPrefix + previousPost.url
     }
   }) %}
 {% endif %}
@@ -16,7 +15,7 @@
   {% set pagination = pagination | mergeObjects({
     next: {
       labelText: nextPost.data.title,
-      href: siteURL + nextPost.url
+      href: pathPrefix + nextPost.url
     }
   }) %}
 {% endif %}
