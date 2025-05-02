@@ -24,7 +24,7 @@
       {% include "cookie-success.njk" ignore missing %}
       
       <div class="govuk-prose">
-        {{ content | safe }}
+        {{ content | applyPreviewPathPrefixToLinks | safe }}
       </div>
 
       {% include "cookie-form.njk" ignore missing %}
