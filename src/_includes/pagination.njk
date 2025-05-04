@@ -1,72 +1,12 @@
-{# {% set flatNavItems = collections.fitnote | eleventyNavigation | flattenNavigationAndAddNextPrev %}
-
-<ul class="pagination">
-{% for item in flatNavItems %}
-  
-  {% if item.url === page.url %}
-
-    {% if item.prev %}
-    <li>
-      <a href="{{ pathPrefix | trimSlash }}{{ item.prev.url }}">
-        Previous: {{ item.prev.title }}
-      </a>
-    </li>
-    {% endif %}
-
-    {% if item.next %}
-    <li>
-      <a href="{{ pathPrefix | trimSlash }}{{ item.next.url }}">
-        Next: {{ item.next.title }}
-      </a>
-    </li>
-    {% endif %}
-
-  {% endif %}
-
-{% endfor %}
-</ul>
-
-{% set previousPost = collections.fitnote | getPreviousCollectionItem(page.url) %}
-{% set nextPost = collections.fitnote | getNextCollectionItem(page.url) %}
-{% set pagination = {} %}
-
-{% if previousPost %}
-  {% set pagination = pagination | mergeObjects({
-    previous: {
-      labelText: previousPost.data.title,
-      href: (pathPrefix | trimSlash) + previousPost.url
-    }
-  }) %}
-{% endif %}
-
-{% if nextPost %}
-  {% set pagination = pagination | mergeObjects({
-    next: {
-      labelText: nextPost.data.title,
-      href: (pathPrefix | trimSlash) + nextPost.url
-    }
-  }) %}
-{% endif %}
-
-{{ govukComponent("pagination", pagination) }}
-
- #}
-
-
-{# Get flat list with prev/next references #}
 {% set flatNavItems = collections.fitnote | eleventyNavigation | flattenNavigationAndAddNextPrev %}
-
-{# Find the current item based on page URL #}
 {% set currentItem = flatNavItems | findByUrl(page.url) %}
-
-{# Start building the pagination object #}
 {% set pagination = {} %}
 
 {% if currentItem.prev %}
   {% set pagination = pagination | mergeObjects({
     previous: {
       labelText: currentItem.prev.title,
-      href: currentItem.prev.url
+      href: (pathPrefix | trimSlash) + currentItem.prev.url
     }
   }) %}
 {% endif %}
@@ -75,10 +15,9 @@
   {% set pagination = pagination | mergeObjects({
     next: {
       labelText: currentItem.next.title,
-      href: currentItem.next.url
+      href: (pathPrefix | trimSlash) + currentItem.next.url
     }
   }) %}
 {% endif %}
 
-{# Render the component using your existing logic #}
 {{ govukComponent("pagination", pagination) }}
