@@ -20,7 +20,7 @@
   <div class="govuk-grid-column-two-thirds govuk-!-margin-top-6">
     
     <div class="govuk-prose">
-      {{ content | applyPreviewPathPrefixToLinks | safe }}
+      {{ content | markdownPathPrefix | safe }}
     </div>
 
     {% include "pagination.njk" ignore missing %}

@@ -22,7 +22,7 @@
     <div class="govuk-grid-column-two-thirds">
       
       <div class="govuk-prose">
-        {{ content | applyPreviewPathPrefixToLinks | safe }}
+        {{ content | markdownPathPrefix | safe }}
       </div>
 
     </div>
