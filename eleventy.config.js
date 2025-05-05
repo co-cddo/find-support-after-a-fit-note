@@ -5,7 +5,8 @@ module.exports = async function (eleventyConfig) {
 
 
   // Watch for changes
-  eleventyConfig.addWatchTarget("./src/assets/");
+  eleventyConfig.addWatchTarget(".src/assets/");
+  eleventyConfig.addWatchTarget(".src/");
 
 
   // Make pathPrefix globally available in my templates
