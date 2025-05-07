@@ -3,7 +3,7 @@ const eleventyEnv = process.env.ELEVENTY_ENV || "development";
 
 const baseURL =
   eleventyEnv === "production"
-    ? "https://co-cddo.github.io"
+    ? "https://find-suppport-after-a-fit-note.digital.cabinet-office.gov.uk"
     : "http://localhost:8080";
 
 const fullSiteUrl = `${baseURL}${pathPrefix}`.replace(/\/+$/, "");

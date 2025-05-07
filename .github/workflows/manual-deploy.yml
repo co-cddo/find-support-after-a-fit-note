@@ -42,7 +42,7 @@ jobs:
       - name: Build site for production
         run: npm run build
         env:
-          ELEVENTY_PATH_PREFIX: "/find-support-after-a-fit-note/"
+          ELEVENTY_PATH_PREFIX: "https://find-suppport-after-a-fit-note.digital.cabinet-office.gov.uk/"
 
       - name: Deploy to GitHub Pages (live)
         uses: peaceiris/actions-gh-pages@v4
