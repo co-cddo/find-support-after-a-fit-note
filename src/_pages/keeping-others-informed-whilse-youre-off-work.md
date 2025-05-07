@@ -1,14 +1,14 @@
 ---
 layout: mainstream-guide.njk
-title: Contact with your employer during sick leave
-permalink: /contact-with-your-employer-during-sick-leave/
+title: Keeping others informed while you’re off work
+permalink: /keeping-others-informed-while-youre-off-work/
 eleventyNavigation:
-  key: Contact with your employer during sick leave
-  order: 2
+  key: Keeping others informed while you’re off work
+  order: 3
 tags: fitnote
 ---
 
-## Contact with your employer during sick leave
+## Keeping others informed while you’re off work
 
 Employers can contact you during sick leave but the amount of contact should be reasonable.
 

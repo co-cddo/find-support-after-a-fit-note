@@ -4,7 +4,7 @@ title: Preparing to return to work
 permalink: /preparing-to-return-to-work/
 eleventyNavigation:
   key: Preparing to return to work
-  order: 5
+  order: 6
 tags: fitnote
 ---
 

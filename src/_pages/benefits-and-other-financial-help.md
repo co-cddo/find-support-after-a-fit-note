@@ -4,7 +4,7 @@ title: Benefits and other financial help
 permalink: /benefits-and-other-financial-help/
 eleventyNavigation:
   key: Benefits and other financial help
-  order: 3
+  order: 4
 tags: fitnote
 ---
 

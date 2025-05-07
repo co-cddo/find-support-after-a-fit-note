@@ -4,7 +4,7 @@ title: When you’re back at work
 permalink: /when-youre-back-at-work/
 eleventyNavigation:
   key: When you’re back at work
-  order: 6
+  order: 7
 tags: fitnote
 ---
 

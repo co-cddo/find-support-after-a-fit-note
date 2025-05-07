@@ -12,7 +12,7 @@ module.exports = {
   siteEnvironment: eleventyEnv,
   serviceName: "Find support after a fit note",
   siteName: "GOV.UK",
-  siteDescription: "Get help if you’re taking time off work due to a health condition",
+  siteDescription: "Get help for time off work due to illness or personal issues",
   siteEmail: "health-work-research@digital.cabinet-office.gov.uk",
   fullSiteUrl,
   siteOgImage: `${fullSiteUrl}/assets/images/govuk-opengraph-image.png`
