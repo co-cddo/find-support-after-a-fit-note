@@ -10,7 +10,7 @@ module.exports = eleventyConfig => {
   eleventyConfig.on("afterBuild", () => {
     
     // Set the pathPrefix for the production environment
-    const pathPrefix = isProduction ? "/find-support-after-a-fit-note" : "";
+    const pathPrefix = isProduction ? "/" : "";
 
     return esbuild.build({
       entryPoints: ["./src/assets/styles/app.scss"],
@@ -24,8 +24,7 @@ module.exports = eleventyConfig => {
           return css;
         }
       })],
-      define: {
-        
+      define: {        
         // Inject pathPrefix into the SCSS build process
         $pathPrefix: JSON.stringify(pathPrefix),
       },

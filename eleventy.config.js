@@ -36,6 +36,10 @@ module.exports = async function (eleventyConfig) {
   });
 
 
+  // Copy CNAME
+  eleventyConfig.addPassthroughCopy("src/CNAME");
+
+
   // Filters
   require("./config/filters/merge-filter.js")(eleventyConfig);
   require("./config/filters/merge-objects.js")(eleventyConfig);

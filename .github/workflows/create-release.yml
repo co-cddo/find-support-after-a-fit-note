@@ -115,7 +115,7 @@ jobs:
           npm ci
           npm run build
         env:
-          ELEVENTY_PATH_PREFIX: "/find-support-after-a-fit-note/"
+          ELEVENTY_PATH_PREFIX: "/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
