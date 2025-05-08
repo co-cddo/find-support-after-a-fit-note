@@ -1,6 +1,6 @@
 const fs = require("fs");
 const isProduction = process.env.ELEVENTY_ENV === "production";
-const pathPrefix = isProduction ? "/" : "";
+const pathPrefix = isProduction ? "" : "";
 
 const scssContent = `$pathPrefix: "${pathPrefix}";
 $govuk-images-path: "#{$pathPrefix}/assets/images/";
