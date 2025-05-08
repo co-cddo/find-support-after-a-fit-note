@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
-      ELEVENTY_PATH_PREFIX: /preview/pr-${{ github.event.pull_request.number }}/
+      ELEVENTY_PATH_PREFIX: https://find-suppport-after-a-fit-note.digital.cabinet-office.gov.uk/preview/pr-${{ github.event.pull_request.number }}/
 
     steps:
       - name: Checkout code
@@ -32,7 +32,7 @@ jobs:
       - name: Build site with Eleventy
         run: npm run build
         env:
-          ELEVENTY_PATH_PREFIX: /preview/pr-${{ github.event.pull_request.number }}/
+          ELEVENTY_PATH_PREFIX: https://find-suppport-after-a-fit-note.digital.cabinet-office.gov.uk/preview/pr-${{ github.event.pull_request.number }}/
         
       - name: Deploy to GitHub Pages (preview)
         uses: peaceiris/actions-gh-pages@v4
@@ -50,6 +50,6 @@ jobs:
           body: |
             ✅ **Preview deployed for PR #${{ github.event.pull_request.number }} — _${{ github.event.pull_request.title }}_**
 
-            🔗 [View preview site](/preview/pr-${{ github.event.pull_request.number }}/)
+            🔗 [View preview site](https://find-suppport-after-a-fit-note.digital.cabinet-office.gov.uk/preview/pr-${{ github.event.pull_request.number }}/)
 
             _Note: It may take up to 30 seconds for the preview to become available due to GitHub Pages propagation._
