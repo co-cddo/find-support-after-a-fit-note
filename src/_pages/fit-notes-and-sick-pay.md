@@ -12,6 +12,8 @@ tags: fitnote
 
 You can get a fit note from a healthcare professional, such as your GP, if you’re too unwell to work.
 
+A fit note is a statement from a doctor that says whether you’re well enough to work. You’ll get one if your doctor thinks your health affects your ability to work.
+
 ### If you’re employed
 
 You need to give your fit note to your employer as soon as possible. You can scan it and email it, or send a digital copy.
