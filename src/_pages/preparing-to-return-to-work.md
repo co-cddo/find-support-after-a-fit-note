@@ -10,25 +10,37 @@ tags: fitnote
 
 ## Preparing to return to work
 
-Discuss with your employer if you’re able to return to work.
+Whether you’re employed, self-employed or run your own business, there is support to help you get back to work after time off for a health condition.
 
-You can go back earlier than the end date on your fit note if you’re well enough. You do not have to see a healthcare professional again to go back to work.
+### If you are employed
 
-You employer must discuss with you how they can help you return.
+Talk to your employer about returning to work. You can go back earlier than the end date on your fit note if you feel well enough — you don’t need another appointment with your doctor.
 
-You can use the [Health Adjustment Passport](https://gov.uk/government/publications/health-adjustment-passport/) form when talking with your employer.
+Your employer should work with you to make your return easier. You could:
 
-It helps you identify what help or changes you need to return to work or stay in work. For example, you may:
+- ask for a phased return or flexible hours
+- request reasonable adjustments to your role or working environment
+- apply for an [Access to Work](https://gov.uk/access-to-work/) grant to help cover practical support
+- speak to an occupational health adviser if your organisation has one
+- check if there are specific rules for your job — for example, if you drive a lorry or bus, check medical conditions and driving rules
 
-- need a [phased return](https://acas.org.uk/returning-to-work-after-absence/phased-return-to-work/), flexible or part-time working
-- need some [reasonable adjustments](https://gov.uk/reasonable-adjustments-for-disabled-workers/) before you can go back
-- want to apply for an [Access to Work](https://gov.uk/access-to-work/) grant, which will pay for support you need to stay in your job
-- speak to an occupational health adviser in your organisation
-- have to meet certain rules before you can return after illness, for example, if you drive a lorry or bus, [find out about driving with a medical condition](https://gov.uk/driving-medical-conditions/)
+You can use the [Health Adjustment Passport form](https://gov.uk/government/publications/health-adjustment-passport/) to help plan your return. It can guide conversations with your employer about what support you may need.
 
-If your employer wants to dismiss you on sick leave, read about [your rights](/if-you-cannot-return-or-your-employer-wants-to-dismiss-you/).
+### If you’re self-employed or run a business
 
-There are also organisations who can advise and help you liaise with your employer:
+If you’re a sole trader or run your own limited company, you might still need to gradually restart your work, adapt how you operate, or seek outside support — even if there’s no formal employer involved.
 
-- [Get help with talking to your employer from Citizens Advice](https://citizensadvice.org.uk/work/negotiating-with-your-employer/dealing-with-a-problem-at-work/)
-- [Get free advice on returning to work after absence from ACAS](https://acas.org.uk/returning-to-work-after-absence/)
+You could:
+
+- adjust your working hours or take on lighter duties
+- apply for an [Access to Work](https://gov.uk/access-to-work/) grant to help pay for specialist equipment or a support worker
+- speak to a business mentor or local enterprise adviser about managing workload
+- use the [Health Adjustment Passport](https://gov.uk/government/publications/health-adjustment-passport/) to reflect on your needs and make a plan
+- get advice from your accountant or business network about phased return to work
+
+### Know your rights
+
+If you’re employed and your employer is considering ending your contract due to illness, it’s important to know your rights:
+
+- [Get advice from Citizens Advice](https://citizensadvice.org.uk/work/sick-or-disabled-people-and-work/if-youre-sick-or-disabled-and-youre-employed/)
+- [Free guidance from ACAS (Advisory, Conciliation and Arbitration Service) on going back to work](https://acas.org.uk/absence-from-work/)
