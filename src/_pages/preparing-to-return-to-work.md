@@ -10,37 +10,33 @@ tags: fitnote
 
 ## Preparing to return to work
 
-Whether you’re employed, self-employed or run your own business, there is support to help you get back to work after time off for a health condition.
+You can go back to work before the end date on your fit note if you feel well enough. You do not need to see a healthcare professional again unless your employer or industry requires it.
 
 ### If you are employed
 
-Talk to your employer about returning to work. You can go back earlier than the end date on your fit note if you feel well enough — you don’t need another appointment with your doctor.
+Talk to your employer about how they can support your return. By law, your employer must consider how to help you return to work safely.
 
-Your employer should work with you to make your return easier. You could:
+You might:
 
-- ask for a phased return or flexible hours
-- request reasonable adjustments to your role or working environment
-- apply for an [Access to Work](https://gov.uk/access-to-work/) grant to help cover practical support
-- speak to an occupational health adviser if your organisation has one
-- check if there are specific rules for your job — for example, if you drive a lorry or bus, check medical conditions and driving rules
+- return in stages (called a phased return)
+- work fewer hours or flexible hours for a while
+- need some reasonable adjustments to your job or workplace
+- speak to an occupational health adviser (if your employer has one)
 
-You can use the [Health Adjustment Passport form](https://gov.uk/government/publications/health-adjustment-passport/) to help plan your return. It can guide conversations with your employer about what support you may need.
+You can use the [Health Adjustment Passport](https://gov.uk/government/publications/health-adjustment-passport/) to help identify what support you need.
+
+You may also be able to get an [Access to Work](https://gov.uk/access-to-work/) grant, which will pay for support you need to stay in work.
+
+If your job involves safety rules, for example, if you drive a lorry or bus, [check the medical rules for driving](https://gov.uk/health-conditions-and-driving/).
+
+ If your employer is considering ending your employment while you’re off sick, [read about your rights while off work sick](https://gov.uk/time-off-for-dependants/).
 
 ### If you’re self-employed or run a business
 
-If you’re a sole trader or run your own limited company, you might still need to gradually restart your work, adapt how you operate, or seek outside support — even if there’s no formal employer involved.
+If you’re a sole trader or run your own limited company, you won’t have an employer to talk to, but you might still need to:
 
-You could:
+- adjust your workload or client commitments
+- get advice on financial or business support if you’re not ready to return
+- speak to HMRC if your income or ability to work is affected
 
-- adjust your working hours or take on lighter duties
-- apply for an [Access to Work](https://gov.uk/access-to-work/) grant to help pay for specialist equipment or a support worker
-- speak to a business mentor or local enterprise adviser about managing workload
-- use the [Health Adjustment Passport](https://gov.uk/government/publications/health-adjustment-passport/) to reflect on your needs and make a plan
-- get advice from your accountant or business network about phased return to work
-
-### Know your rights
-
-If you’re employed and your employer is considering ending your contract due to illness, it’s important to know your rights:
-
-- [Get advice from Citizens Advice](https://citizensadvice.org.uk/work/sick-or-disabled-people-and-work/if-youre-sick-or-disabled-and-youre-employed/)
-- [Free guidance from ACAS (Advisory, Conciliation and Arbitration Service) on going back to work](https://acas.org.uk/absence-from-work/)
+You can also apply for an [Access to Work](https://gov.uk/access-to-work/) grant if you need support to continue working with a health condition or disability.
