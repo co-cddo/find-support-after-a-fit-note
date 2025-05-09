@@ -16,7 +16,22 @@ function sendAnalytics() {
   gtag("config", "G-LCRPJR51P6");
 }
 
-var config = {
+// Attempt to send analytics if preference is set to 'on'
+function trySendAnalytics() {
+  try {
+    const value = getCookieValue("cookie-preferences");
+    if (value) {
+      const parsed = JSON.parse(value);
+      if (parsed.analytics === "on") {
+        sendAnalytics();
+      }
+    }
+  } catch (err) {
+    console.error("Error parsing cookie preferences:", err);
+  }
+}
+
+const config = {
   userPreferences: {
     cookieName: "cookie-preferences",
     cookieExpiry: 365,
@@ -76,10 +91,16 @@ const setCookie = (name, value, days, secure, sameSite) => {
 
 // Function to set user preferences
 const setUserPreferences = (preferences) => {
-  setCookie(config.userPreferences.cookieName, JSON.stringify(preferences), config.userPreferences.cookieExpiry, config.userPreferences.cookieSecure, config.userPreferences.cookieSameSite);
+  setCookie(
+    config.userPreferences.cookieName,
+    JSON.stringify(preferences),
+    config.userPreferences.cookieExpiry,
+    config.userPreferences.cookieSecure,
+    config.userPreferences.cookieSameSite
+  );
 };
 
-const reloadCallback = function(eventData) {
+const reloadCallback = function (eventData) {
   let successBanner = document.querySelector(".cookie-banner-success");
   window.scrollTo({
     top: 0,
@@ -89,28 +110,32 @@ const reloadCallback = function(eventData) {
   successBanner.focus();
 };
 
-// Callback to trigger sending analytics if the analytics preference has been accepted in the cookie banner
-const triggerAnalyticsCallback = function(eventData) {
+// Callback to trigger sending analytics if the analytics preference has been accepted
+const triggerAnalyticsCallback = function (eventData) {
   if (eventData === "accept") {
     sendAnalytics();
-    setUserPreferences({ analytics: "on" }); // Set user preferences for analytics
+    setUserPreferences({ analytics: "on" });
   } else if (eventData === "reject") {
-    setUserPreferences({ analytics: "off" }); // Set user preferences to "off"
+    setUserPreferences({ analytics: "off" });
   }
 };
 
-// Initialise the cookie manager
-window.cookieManager.on("PreferenceFormSubmitted", reloadCallback);
-window.cookieManager.on("CookieBannerAction", triggerAnalyticsCallback);
-window.cookieManager.init(config);
+// Initialise cookie manager safely
+if (window.cookieManager) {
+  window.cookieManager.on("PreferenceFormSubmitted", () => {
+    reloadCallback();
+    trySendAnalytics(); // Re-check after form submission
+  });
 
-// Send analytics if the cookie is set
-try {
-  const result = (JSON.parse(getCookieValue("cookie-preferences")).analytics === "on");
-  // Cookie has been set
-  if (result === true) {
-    sendAnalytics();
-  }
-} catch (err) {
-  console.error("Error parsing cookie preferences:", err);
+  window.cookieManager.on("CookieBannerAction", (eventData) => {
+    triggerAnalyticsCallback(eventData);
+    trySendAnalytics(); // Check after banner interaction
+  });
+
+  window.cookieManager.init(config);
 }
+
+// Check cookie state on initial load (after DOM is ready)
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(trySendAnalytics, 100); // Small delay ensures init has completed
+});
