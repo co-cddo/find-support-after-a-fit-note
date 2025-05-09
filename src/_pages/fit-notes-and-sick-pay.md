@@ -43,4 +43,4 @@ If you’re self-employed or run your own limited company, you cannot get SSP, b
 - [Getting sick pay if you’re pregnant](https://citizensadvice.org.uk/work/sick-leave-and-sick-pay/getting-sick-pay-when-youre-pregnant/)
 - [If your employer refuses to pay you sick pay](https://citizensadvice.org.uk/work/sick-leave-and-sick-pay/if-your-employer-refuses-to-pay-you-sick-pay/)
 
-You can get advice and help from [Citizens Advice](https://citizensadvice.org.uk/) or [ACAS](https://acas.org.uk/).
+[Citizens Advice](https://citizensadvice.org.uk/) or [ACAS](https://acas.org.uk/) (Advisory, Conciliation and Arbitration Service) can help you understand your rights to sick pay and what to do if you’re having problems at work.
