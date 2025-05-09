@@ -65,4 +65,9 @@
     @extend .govuk-table__cell;
   }
 
+  blockquote {
+    @extend .govuk-inset-text;
+    margin-left: 0;
+  }
+
 }

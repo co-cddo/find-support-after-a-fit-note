@@ -10,13 +10,37 @@ function gtag() {
   dataLayer.push(arguments);
 }
 
-// Send analytics
 function sendAnalytics() {
   gtag("js", new Date());
   gtag("config", "G-LCRPJR51P6");
 }
 
-var config = {
+// Try sending analytics if consent was granted
+function trySendAnalytics() {
+  try {
+    const value = getCookieValue("cookie-preferences");
+    if (value) {
+      const parsed = JSON.parse(value);
+      if (parsed.analytics === "on") {
+        sendAnalytics();
+      }
+    }
+  } catch (err) {
+    console.error("Error parsing cookie preferences:", err);
+  }
+}
+
+// Delete specific cookies by name and path
+function deleteCookie(name) {
+  document.cookie = `${name}=; path=/; domain=.digital.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+}
+
+// Delete all known analytics cookies
+function deleteAnalyticsCookies() {
+  ["_ga", "_gid", "analytics"].forEach(deleteCookie);
+}
+
+const config = {
   userPreferences: {
     cookieName: "cookie-preferences",
     cookieExpiry: 365,
@@ -52,11 +76,7 @@ var config = {
     {
       categoryName: "analytics",
       optional: true,
-      cookies: [
-        "analytics",
-        "_ga",
-        "_gid"
-      ]
+      cookies: ["analytics", "_ga", "_gid"]
     }
   ],
   additionalOptions: {
@@ -67,50 +87,62 @@ var config = {
   }
 };
 
-// Function to set cookies with the same site attribute
+// Set cookie with domain
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? "Secure;" : "";
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+  const domainFlag = "domain=.digital.cabinet-office.gov.uk;";
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
 };
 
-// Function to set user preferences
+// Set user preference cookie
 const setUserPreferences = (preferences) => {
-  setCookie(config.userPreferences.cookieName, JSON.stringify(preferences), config.userPreferences.cookieExpiry, config.userPreferences.cookieSecure, config.userPreferences.cookieSameSite);
+  setCookie(
+    config.userPreferences.cookieName,
+    JSON.stringify(preferences),
+    config.userPreferences.cookieExpiry,
+    config.userPreferences.cookieSecure,
+    config.userPreferences.cookieSameSite
+  );
 };
 
-const reloadCallback = function(eventData) {
-  let successBanner = document.querySelector(".cookie-banner-success");
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-  successBanner.removeAttribute("hidden");
-  successBanner.focus();
+// Reload banner callback
+const reloadCallback = () => {
+  const successBanner = document.querySelector(".cookie-banner-success");
+  if (successBanner) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    successBanner.removeAttribute("hidden");
+    successBanner.focus();
+  }
 };
 
-// Callback to trigger sending analytics if the analytics preference has been accepted in the cookie banner
-const triggerAnalyticsCallback = function(eventData) {
+// Trigger analytics based on cookie banner choice
+const triggerAnalyticsCallback = (eventData) => {
   if (eventData === "accept") {
+    setUserPreferences({ analytics: "on" });
     sendAnalytics();
-    setUserPreferences({ analytics: "on" }); // Set user preferences for analytics
   } else if (eventData === "reject") {
-    setUserPreferences({ analytics: "off" }); // Set user preferences to "off"
+    setUserPreferences({ analytics: "off" });
+    deleteAnalyticsCookies();
   }
 };
 
-// Initialise the cookie manager
-window.cookieManager.on("PreferenceFormSubmitted", reloadCallback);
-window.cookieManager.on("CookieBannerAction", triggerAnalyticsCallback);
-window.cookieManager.init(config);
+// Init when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.cookieManager) {
+    window.cookieManager.on("PreferenceFormSubmitted", () => {
+      reloadCallback();
+      trySendAnalytics();
+    });
 
-// Send analytics if the cookie is set
-try {
-  const result = (JSON.parse(getCookieValue("cookie-preferences")).analytics === "on");
-  // Cookie has been set
-  if (result === true) {
-    sendAnalytics();
+    window.cookieManager.on("CookieBannerAction", (eventData) => {
+      triggerAnalyticsCallback(eventData);
+      trySendAnalytics();
+    });
+
+    window.cookieManager.init(config);
   }
-} catch (err) {
-  console.error("Error parsing cookie preferences:", err);
-}
+
+  // Final fallback check
+  setTimeout(trySendAnalytics, 100);
+});

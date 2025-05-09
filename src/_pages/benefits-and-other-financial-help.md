@@ -4,7 +4,7 @@ title: Benefits and other financial help
 permalink: /benefits-and-other-financial-help/
 eleventyNavigation:
   key: Benefits and other financial help
-  order: 3
+  order: 4
 tags: fitnote
 ---
 
@@ -13,20 +13,20 @@ tags: fitnote
 You may get benefits if:
 
 - you need help on top of sick pay
-- you’re not eligible for sick pay
+- you’re not eligible for sick pay - for example, you are self-employed
 - sick pay has ended
+
+Even if you’re self-employed and don’t get sick pay, you may still be eligible for [New Style Employment and Support Allowance (ESA)](https://gov.uk/employment-support-allowance/eligibility/), [Universal Credit](https://gov.uk/self-employment-and-universal-credit/), or other support depending on your circumstances.
 
 Use a [benefits calculator](https://gov.uk/benefits-calculators/) to work out which benefits you could get and how much you might receive each week.
 
-You might also be eligible for other help as well as benefits.
-
 ### Health costs
 
-Get help with [NHS prescriptions, dental treatment, eye tests and other costs](https://gov.uk/help-nhs-costs/).
+You may be able to get help with [NHS prescriptions, dental treatment, eye tests and other costs](https://gov.uk/help-nhs-costs/).
 
 ### Bills
 
-Get help with the [cost of living if you have a health condition or disability](https://gov.uk/cost-of-living/).
+Check what help is available with the [cost of living if you have a health condition or disability](https://gov.uk/cost-of-living/).
 
 For example you might be able to get:
 
