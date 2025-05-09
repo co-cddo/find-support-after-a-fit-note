@@ -1,22 +1,29 @@
 window.dataLayer = window.dataLayer || [];
 
-// Get cookie value
+// Utility to get cookie value by name
 const getCookieValue = (name) => (
   document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")?.pop() || ""
 );
 
-// Google Analytics
+// Google Analytics setup
 function gtag() {
   dataLayer.push(arguments);
 }
 
-// Send analytics
 function sendAnalytics() {
   gtag("js", new Date());
   gtag("config", "G-LCRPJR51P6");
 }
 
-// Attempt to send analytics if preference is set to 'on'
+// Remove analytics cookies
+function removeAnalyticsCookies() {
+  const cookies = ["_ga", "_gid", "analytics"];
+  cookies.forEach(name => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
+  });
+}
+
+// Attempt to send analytics if preference is 'on', otherwise clear analytics cookies
 function trySendAnalytics() {
   try {
     const value = getCookieValue("cookie-preferences");
@@ -24,6 +31,8 @@ function trySendAnalytics() {
       const parsed = JSON.parse(value);
       if (parsed.analytics === "on") {
         sendAnalytics();
+      } else {
+        removeAnalyticsCookies();
       }
     }
   } catch (err) {
@@ -82,14 +91,14 @@ const config = {
   }
 };
 
-// Function to set cookies with the same site attribute
+// Utility to set a cookie with SameSite and Secure options
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? "Secure;" : "";
   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
-// Function to set user preferences
+// Store user preferences in cookie
 const setUserPreferences = (preferences) => {
   setCookie(
     config.userPreferences.cookieName,
@@ -100,42 +109,43 @@ const setUserPreferences = (preferences) => {
   );
 };
 
-const reloadCallback = function (eventData) {
-  let successBanner = document.querySelector(".cookie-banner-success");
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-  successBanner.removeAttribute("hidden");
-  successBanner.focus();
-};
-
-// Callback to trigger sending analytics if the analytics preference has been accepted
-const triggerAnalyticsCallback = function (eventData) {
-  if (eventData === "accept") {
-    sendAnalytics();
-    setUserPreferences({ analytics: "on" });
-  } else if (eventData === "reject") {
-    setUserPreferences({ analytics: "off" });
+// Callback to show confirmation message and scroll up
+const reloadCallback = () => {
+  const successBanner = document.querySelector(".cookie-banner-success");
+  if (successBanner) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    successBanner.removeAttribute("hidden");
+    successBanner.focus();
   }
 };
 
-// Initialise cookie manager safely
-if (window.cookieManager) {
-  window.cookieManager.on("PreferenceFormSubmitted", () => {
-    reloadCallback();
-    trySendAnalytics(); // Re-check after form submission
-  });
+// Callback triggered on banner action (accept/reject)
+const triggerAnalyticsCallback = (eventData) => {
+  if (eventData === "accept") {
+    setUserPreferences({ analytics: "on" });
+    sendAnalytics();
+  } else if (eventData === "reject") {
+    setUserPreferences({ analytics: "off" });
+    removeAnalyticsCookies();
+  }
+};
 
-  window.cookieManager.on("CookieBannerAction", (eventData) => {
-    triggerAnalyticsCallback(eventData);
-    trySendAnalytics(); // Check after banner interaction
-  });
-
-  window.cookieManager.init(config);
-}
-
-// Check cookie state on initial load (after DOM is ready)
+// Initialise cookie manager once DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(trySendAnalytics, 100); // Small delay ensures init has completed
+  if (window.cookieManager) {
+    window.cookieManager.on("PreferenceFormSubmitted", () => {
+      reloadCallback();
+      trySendAnalytics();
+    });
+
+    window.cookieManager.on("CookieBannerAction", (eventData) => {
+      triggerAnalyticsCallback(eventData);
+      trySendAnalytics();
+    });
+
+    window.cookieManager.init(config);
+  }
+
+  // Initial check after DOM load
+  setTimeout(trySendAnalytics, 100);
 });
