@@ -15,8 +15,11 @@ function gtag() {
 
 // Send analytics + load GTM only after consent
 function sendAnalytics() {
-  gtag("js", new Date());
-  gtag("config", "G-LCRPJR51P6");
+  // Ensure the correct domain is set for GA cookies
+  window.gtag('config', 'G-LCRPJR51P6', {
+    cookie_flags: 'secure;samesite=none',  // Set Secure and SameSite attributes
+    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'  // Set domain for GA cookies
+  });
 
   dataLayer.push({ event: "analytics_enabled" });
 
