@@ -1,21 +1,33 @@
 window.dataLayer = window.dataLayer || [];
 
+// --- Helpers ---
+
 // Get cookie value
 const getCookieValue = (name) => (
   document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")?.pop() || ""
 );
 
-// Google Analytics
+// Google Analytics setup
 function gtag() {
   dataLayer.push(arguments);
 }
 
+// Send analytics + load GTM only after consent
 function sendAnalytics() {
   gtag("js", new Date());
   gtag("config", "G-LCRPJR51P6");
+
+  // Push a custom event to Tag Manager
+  dataLayer.push({ event: "analytics_enabled" });
+
+  // Dynamically inject GTM
+  const gtmScript = document.createElement("script");
+  gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
+  gtmScript.async = true;
+  document.head.appendChild(gtmScript);
 }
 
-// Try sending analytics if consent was granted
+// Attempt analytics setup based on cookie
 function trySendAnalytics() {
   try {
     const value = getCookieValue("cookie-preferences");
@@ -30,15 +42,17 @@ function trySendAnalytics() {
   }
 }
 
-// Delete specific cookies by name and path
+// Delete specific cookie
 function deleteCookie(name) {
-  document.cookie = `${name}=; path=/; domain=.digital.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  document.cookie = `${name}=; path=/; domain=.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 }
 
 // Delete all known analytics cookies
 function deleteAnalyticsCookies() {
-  ["_ga", "_gid", "analytics"].forEach(deleteCookie);
+  ["_ga", "_gid", "_ga_ID", "analytics"].forEach(deleteCookie);
 }
+
+// --- Config ---
 
 const config = {
   userPreferences: {
@@ -76,7 +90,7 @@ const config = {
     {
       categoryName: "analytics",
       optional: true,
-      cookies: ["analytics", "_ga", "_gid"]
+      cookies: ["analytics", "_ga", "_gid", "_ga_ID"]
     }
   ],
   additionalOptions: {
@@ -87,15 +101,15 @@ const config = {
   }
 };
 
-// Set cookie with domain
+// Set cookie with correct domain and attributes
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? "Secure;" : "";
-  const domainFlag = "domain=.digital.cabinet-office.gov.uk;";
+  const domainFlag = "domain=.cabinet-office.gov.uk;";
   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
 };
 
-// Set user preference cookie
+// Store user preferences
 const setUserPreferences = (preferences) => {
   setCookie(
     config.userPreferences.cookieName,
@@ -106,7 +120,7 @@ const setUserPreferences = (preferences) => {
   );
 };
 
-// Reload banner callback
+// Show success banner
 const reloadCallback = () => {
   const successBanner = document.querySelector(".cookie-banner-success");
   if (successBanner) {
@@ -116,7 +130,7 @@ const reloadCallback = () => {
   }
 };
 
-// Trigger analytics based on cookie banner choice
+// Handle analytics based on banner action
 const triggerAnalyticsCallback = (eventData) => {
   if (eventData === "accept") {
     setUserPreferences({ analytics: "on" });
@@ -127,7 +141,7 @@ const triggerAnalyticsCallback = (eventData) => {
   }
 };
 
-// Init when DOM is ready
+// Init on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   if (window.cookieManager) {
     window.cookieManager.on("PreferenceFormSubmitted", () => {
@@ -143,6 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.cookieManager.init(config);
   }
 
-  // Final fallback check
+  // Fallback check
   setTimeout(trySendAnalytics, 100);
 });
