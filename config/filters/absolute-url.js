@@ -1,10 +1,17 @@
 const pathPrefix = process.env.ELEVENTY_PATH_PREFIX || "/";
 
-module.exports = function(eleventyConfig) {
+module.exports = function (eleventyConfig) {
   
-  // Filter to join paths with pathPrefix
-  eleventyConfig.addFilter("absoluteUrl", function (path) {
-    return `${pathPrefix}${path}`.replace(/\/{2,}/g, "/");
+  eleventyConfig.addFilter("absoluteUrl", function (path = "") {
+
+    // Skip modification for absolute URLs
+    if (/^(?:[a-z]+:)?\/\//i.test(path)) return path;
+
+    return (pathPrefix.replace(/\/$/, "") + "/" + path.replace(/^\/+/, "")).replace(/\/{2,}/g, "/");
   });
+
+  return {
+    pathPrefix
+  };
 
 };

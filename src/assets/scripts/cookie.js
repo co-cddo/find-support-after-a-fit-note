@@ -1,27 +1,84 @@
 window.dataLayer = window.dataLayer || [];
 
-// Get cookie value
-const getCookieValue = (name) => (
-  document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")?.pop() || ""
-);
+// --- Helpers ---
 
-// Google Analytics
+const isLocalhost = location.hostname === "localhost";
+const cookieDomain = isLocalhost ? undefined : "find-support-after-a-fit-note.digital.cabinet-office.gov.uk";
+const cookieSecure = !isLocalhost;
+const cookieSameSite = isLocalhost ? "Lax" : "None";
+
+// Get cookie value
+const getCookieValue = (name) => {
+  const match = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+  return match?.pop() || "";
+};
+
+// Google Analytics setup
 function gtag() {
-  dataLayer.push(arguments);
+  window.dataLayer.push(arguments);
 }
 
-// Send analytics
+// Send analytics + load GTM only after consent
 function sendAnalytics() {
+  if (typeof gtag !== "function") return;
+
   gtag("js", new Date());
   gtag("config", "G-LCRPJR51P6");
+
+  window.dataLayer.push({ event: "analytics_enabled" });
+
+  const gtmScript = document.createElement("script");
+  gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
+  gtmScript.async = true;
+  document.head.appendChild(gtmScript);
 }
 
-var config = {
+// Attempt analytics setup based on cookie
+function trySendAnalytics() {
+  try {
+    const value = getCookieValue("cookie-preferences");
+    if (value) {
+      const parsed = JSON.parse(value);
+      if (parsed.analytics === "on") {
+        sendAnalytics();
+      }
+    }
+  } catch (err) {
+    console.error("Error parsing cookie preferences:", err);
+  }
+}
+
+// Delete cookie with both domain scopes
+function deleteCookie(name) {
+
+  const domains = [
+    location.hostname, // e.g. find-support-after-a-fit-note.digital.cabinet-office.gov.uk
+    "." + location.hostname.replace(/^find-support-after-a-fit-note\./, ""), // e.g. .digital.cabinet-office.gov.uk
+    ".cabinet-office.gov.uk"
+  ];
+
+  domains.forEach((domain) => {
+    document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  });
+
+  // Try without a domain too (defaults to current domain)
+  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+
+}
+
+// Delete all known analytics cookies
+function deleteAnalyticsCookies() {
+  ["_ga", "_gid", "_ga_ID", "analytics", "cookie-preferences"].forEach(deleteCookie);
+}
+
+// --- Config ---
+
+const config = {
   userPreferences: {
     cookieName: "cookie-preferences",
     cookieExpiry: 365,
-    cookieSecure: location.protocol === "https:",
-    cookieSameSite: "Lax"
+    cookieSecure,
+    cookieSameSite
   },
   preferencesForm: {
     class: "cookie-preferences-form"
@@ -52,11 +109,7 @@ var config = {
     {
       categoryName: "analytics",
       optional: true,
-      cookies: [
-        "analytics",
-        "_ga",
-        "_gid"
-      ]
+      cookies: ["analytics", "_ga", "_gid", "_ga_ID"]
     }
   ],
   additionalOptions: {
@@ -67,50 +120,71 @@ var config = {
   }
 };
 
-// Function to set cookies with the same site attribute
-const setCookie = (name, value, days, secure, sameSite) => {
+// Set cookie with correct domain and attributes
+const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? "Secure;" : "";
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+  const domainFlag = domain ? `domain=${domain};` : "";
+  document.cookie = `${name}=${value}; ${domainFlag} expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
-// Function to set user preferences
+// Store user preferences and ensure no duplicate cookies
 const setUserPreferences = (preferences) => {
-  setCookie(config.userPreferences.cookieName, JSON.stringify(preferences), config.userPreferences.cookieExpiry, config.userPreferences.cookieSecure, config.userPreferences.cookieSameSite);
+  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain
+  setCookie(
+    config.userPreferences.cookieName,
+    JSON.stringify(preferences),
+    config.userPreferences.cookieExpiry,
+    config.userPreferences.cookieSecure,
+    config.userPreferences.cookieSameSite,
+    cookieDomain
+  );
 };
 
-const reloadCallback = function(eventData) {
-  let successBanner = document.querySelector(".cookie-banner-success");
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-  successBanner.removeAttribute("hidden");
-  successBanner.focus();
+// Show success banner
+const reloadCallback = () => {
+  const successBanner = document.querySelector(".cookie-banner-success");
+  if (successBanner) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    successBanner.removeAttribute("hidden");
+    successBanner.focus();
+  }
 };
 
-// Callback to trigger sending analytics if the analytics preference has been accepted in the cookie banner
-const triggerAnalyticsCallback = function(eventData) {
+// Handle analytics based on banner action
+const triggerAnalyticsCallback = (eventData) => {
   if (eventData === "accept") {
+    setUserPreferences({ analytics: "on" });
     sendAnalytics();
-    setUserPreferences({ analytics: "on" }); // Set user preferences for analytics
   } else if (eventData === "reject") {
-    setUserPreferences({ analytics: "off" }); // Set user preferences to "off"
+    setUserPreferences({ analytics: "off" });
+    deleteAnalyticsCookies();
   }
 };
 
-// Initialise the cookie manager
-window.cookieManager.on("PreferenceFormSubmitted", reloadCallback);
-window.cookieManager.on("CookieBannerAction", triggerAnalyticsCallback);
-window.cookieManager.init(config);
+// --- Init ---
 
-// Send analytics if the cookie is set
-try {
-  const result = (JSON.parse(getCookieValue("cookie-preferences")).analytics === "on");
-  // Cookie has been set
-  if (result === true) {
-    sendAnalytics();
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.cookieManager) {
+    window.cookieManager.on("PreferenceFormSubmitted", () => {
+      reloadCallback();
+      trySendAnalytics();
+    });
+
+    window.cookieManager.on("CookieBannerAction", (eventData) => {
+      triggerAnalyticsCallback(eventData);
+      trySendAnalytics();
+    });
+
+    if (typeof window.cookieManager.setConfig === "function") {
+      window.cookieManager.setConfig({
+        cookieDomain: cookieDomain
+      });
+    }
+
+    window.cookieManager.init(config);
   }
-} catch (err) {
-  console.error("Error parsing cookie preferences:", err);
-}
+
+  // Fallback check
+  setTimeout(trySendAnalytics, 100);
+});

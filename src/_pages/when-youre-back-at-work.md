@@ -4,11 +4,11 @@ title: When you’re back at work
 permalink: /when-youre-back-at-work/
 eleventyNavigation:
   key: When you’re back at work
-  order: 6
+  order: 7
 tags: fitnote
 ---
 
-## When you’re back at work
+## When you are back at work
 
 When you’re back, your employer may set up a return to work meeting.
 
