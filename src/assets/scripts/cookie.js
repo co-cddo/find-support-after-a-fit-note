@@ -1,8 +1,6 @@
 window.dataLayer = window.dataLayer || [];
 
 // --- Helpers ---
-
-// Get cookie value
 const getCookieValue = (name) => {
   const match = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
   return match?.pop() || "";
@@ -27,7 +25,7 @@ function loadGtagScript(callback) {
   document.head.appendChild(script);
 }
 
-// Send analytics + load GTM only after consent
+// Initialize Analytics
 function sendAnalytics() {
   loadGtagScript(() => {
     // Ensure the correct domain is set for GA cookies
@@ -37,8 +35,10 @@ function sendAnalytics() {
       cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'  // Set domain for GA cookies
     });
 
+    // Push analytics-enabled event to dataLayer
     dataLayer.push({ event: "analytics_enabled" });
 
+    // Load Google Tag Manager (GTM) script after GA setup
     const gtmScript = document.createElement("script");
     gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
     gtmScript.async = true;
@@ -46,14 +46,14 @@ function sendAnalytics() {
   });
 }
 
-// Attempt analytics setup based on cookie
+// Handle cookies and send analytics based on user preferences
 function trySendAnalytics() {
   try {
     const value = getCookieValue("cookie-preferences");
     if (value) {
       const parsed = JSON.parse(value);
       if (parsed.analytics === "on") {
-        sendAnalytics();
+        sendAnalytics(); // Only initialize GA if consent is "on"
       }
     }
   } catch (err) {
@@ -75,7 +75,6 @@ function deleteAnalyticsCookies() {
 }
 
 // --- Config ---
-
 const config = {
   userPreferences: {
     cookieName: "cookie-preferences",
