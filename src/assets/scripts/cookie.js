@@ -48,15 +48,40 @@ function trySendAnalytics() {
   }
 }
 
+
+
+
 // Delete cookie with both domain scopes
+// function deleteCookie(name) {
+//   // Remove production domain-level cookie
+//   if (cookieDomain) {
+//     document.cookie = `${name}=; path=/; domain=${cookieDomain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+//   }
+//   // Remove subdomain or local cookie
+//   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+// }
+
+
+
 function deleteCookie(name) {
-  // Remove production domain-level cookie
-  if (cookieDomain) {
-    document.cookie = `${name}=; path=/; domain=${cookieDomain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-  }
-  // Remove subdomain or local cookie
+
+  const domains = [
+    location.hostname, // e.g. find-support-after-a-fit-note.digital.cabinet-office.gov.uk
+    "." + location.hostname.replace(/^find-support-after-a-fit-note\./, ""), // e.g. .digital.cabinet-office.gov.uk
+    ".cabinet-office.gov.uk"
+  ];
+
+  domains.forEach((domain) => {
+    document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  });
+
+  // Try without a domain too (defaults to current domain)
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+
 }
+
+
+
 
 // Delete all known analytics cookies
 function deleteAnalyticsCookies() {
