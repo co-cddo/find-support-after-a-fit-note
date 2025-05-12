@@ -1,10 +1,5 @@
 window.dataLayer = window.dataLayer || [];
 
-// --- Remove subdomain-scoped duplicate early ---
-(function removeDuplicateCookiePreferences() {
-  document.cookie = "cookie-preferences=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-})();
-
 // --- Helpers ---
 
 // Get cookie value
@@ -48,9 +43,9 @@ function trySendAnalytics() {
 
 // Delete cookie with both domain scopes (to remove duplicates)
 function deleteCookie(name) {
-  // Remove domain-level cookie
-  document.cookie = `${name}=; path=/; domain=.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-  // Remove subdomain-level cookie (just in case)
+  // Remove exact subdomain cookie
+  document.cookie = `${name}=; path=/; domain=find-support-after-a-fit-note.digital.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  // Remove fallback (no domain)
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 }
 
@@ -112,7 +107,7 @@ const config = {
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? "Secure;" : "";
-  const domainFlag = "domain=.cabinet-office.gov.uk;";
+  const domainFlag = "domain=find-support-after-a-fit-note.digital.cabinet-office.gov.uk;";
   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
 };
 
@@ -165,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Try to configure domain-wide cookies in cookieManager (if supported)
     if (typeof window.cookieManager.setConfig === "function") {
       window.cookieManager.setConfig({
-        cookieDomain: ".cabinet-office.gov.uk"
+        cookieDomain: "find-support-after-a-fit-note.digital.cabinet-office.gov.uk"
       });
     }
 
