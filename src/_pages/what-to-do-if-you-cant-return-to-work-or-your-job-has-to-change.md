@@ -12,7 +12,7 @@ tags: fitnote
 
 Sometimes it’s not possible to go back to work in the same way as before. This could be because of a health condition, disability or changes to your circumstances. 
 
-Whether you’re employed, self-employed or run a business, there is support to help you understand your options and make the next step.
+Whether you are employed, self-employed or run a business, there is support to help you understand your options and make the next step.
 
 ### If you are employed
 
@@ -25,7 +25,7 @@ Your employer must follow the law before they can make any decisions about your 
 
 If your condition is long-term, it may be classed as a disability. Your employer must not discriminate against you. They have a legal duty to support people with disabilities at work under the [Equality Act 2010](https://gov.uk/rights-disabled-person/employment/).
 
-> If you’re dismissed because of a disability, this may be unlawful discrimination.
+> If you are dismissed because of a disability, this may be unlawful discrimination.
 
 You can find out [what employers must do to support you](https://gov.uk/reasonable-adjustments-for-disabled-workers/).
 
@@ -40,7 +40,7 @@ You can contact these organisations:
 
 ### If you are self-employed or run a business
 
-If you’re a sole trader or limited company director and cannot return to work, you may need to:
+If you are a sole trader or limited company director and cannot return to work, you may need to:
 
 - reduce or change the kind of work you do
 - speak to clients or partners about changing your work arrangements
@@ -61,7 +61,8 @@ You do not have to manage on your own. You can get free, confidential advice fro
 
 - [ACAS](https://acas.org.uk/) – (Advisory, Conciliation and Arbitration Service) help with workplace problems and advice on your rights
 - [Citizens Advice](https://citizensadvice.org.uk/) – guidance on your rights at work and help talking to your employer
-Your trade union – if you’re a member, they can support you and speak to your employer for you
+
+Your trade union – if you are a member, they can support you and speak to your employer for you
 
 ### Consider retraining
 

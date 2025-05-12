@@ -14,7 +14,7 @@ You may need to stay in touch with people while you are off work. Who you contac
 
 ### If you are employed
 
-Your employer may contact you while you’re off. The contact should be:
+Your employer may contact you while you are off. The contact should be:
 
 - reasonable
 - agreed between you and your employer
