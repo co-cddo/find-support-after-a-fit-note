@@ -1,11 +1,17 @@
 window.dataLayer = window.dataLayer || [];
 
+// --- Remove subdomain-scoped duplicate early ---
+(function removeDuplicateCookiePreferences() {
+  document.cookie = "cookie-preferences=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+})();
+
 // --- Helpers ---
 
 // Get cookie value
-const getCookieValue = (name) => (
-  document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")?.pop() || ""
-);
+const getCookieValue = (name) => {
+  const match = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+  return match?.pop() || "";
+};
 
 // Google Analytics setup
 function gtag() {
@@ -17,10 +23,8 @@ function sendAnalytics() {
   gtag("js", new Date());
   gtag("config", "G-LCRPJR51P6");
 
-  // Push a custom event to Tag Manager
   dataLayer.push({ event: "analytics_enabled" });
 
-  // Dynamically inject GTM
   const gtmScript = document.createElement("script");
   gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
   gtmScript.async = true;
@@ -42,14 +46,17 @@ function trySendAnalytics() {
   }
 }
 
-// Delete specific cookie
+// Delete cookie with both domain scopes (to remove duplicates)
 function deleteCookie(name) {
+  // Remove domain-level cookie
   document.cookie = `${name}=; path=/; domain=.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  // Remove subdomain-level cookie (just in case)
+  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 }
 
 // Delete all known analytics cookies
 function deleteAnalyticsCookies() {
-  ["_ga", "_gid", "_ga_ID", "analytics"].forEach(deleteCookie);
+  ["_ga", "_gid", "_ga_ID", "analytics", "cookie-preferences"].forEach(deleteCookie);
 }
 
 // --- Config ---
@@ -109,8 +116,9 @@ const setCookie = (name, value, days, secure, sameSite) => {
   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
 };
 
-// Store user preferences
+// Store user preferences and ensure no duplicate cookies
 const setUserPreferences = (preferences) => {
+  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain first
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
@@ -153,6 +161,13 @@ document.addEventListener("DOMContentLoaded", () => {
       triggerAnalyticsCallback(eventData);
       trySendAnalytics();
     });
+
+    // Try to configure domain-wide cookies in cookieManager (if supported)
+    if (typeof window.cookieManager.setConfig === "function") {
+      window.cookieManager.setConfig({
+        cookieDomain: ".cabinet-office.gov.uk"
+      });
+    }
 
     window.cookieManager.init(config);
   }
