@@ -13,20 +13,37 @@ function gtag() {
   dataLayer.push(arguments);
 }
 
+// Load Google Analytics if not already loaded
+function loadGtagScript(callback) {
+  if (window.gtag) {
+    callback(); // gtag already loaded
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.src = "https://www.googletagmanager.com/gtag/js?id=G-LCRPJR51P6";
+  script.async = true;
+  script.onload = callback; // Call the callback once the script is loaded
+  document.head.appendChild(script);
+}
+
 // Send analytics + load GTM only after consent
 function sendAnalytics() {
-  // Ensure the correct domain is set for GA cookies
-  window.gtag('config', 'G-LCRPJR51P6', {
-    cookie_flags: 'secure;samesite=none',  // Set Secure and SameSite attributes
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'  // Set domain for GA cookies
+  loadGtagScript(() => {
+    // Ensure the correct domain is set for GA cookies
+    gtag("js", new Date());
+    gtag('config', 'G-LCRPJR51P6', {
+      cookie_flags: 'secure;samesite=none',  // Set Secure and SameSite attributes
+      cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'  // Set domain for GA cookies
+    });
+
+    dataLayer.push({ event: "analytics_enabled" });
+
+    const gtmScript = document.createElement("script");
+    gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
+    gtmScript.async = true;
+    document.head.appendChild(gtmScript);
   });
-
-  dataLayer.push({ event: "analytics_enabled" });
-
-  const gtmScript = document.createElement("script");
-  gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
-  gtmScript.async = true;
-  document.head.appendChild(gtmScript);
 }
 
 // Attempt analytics setup based on cookie
