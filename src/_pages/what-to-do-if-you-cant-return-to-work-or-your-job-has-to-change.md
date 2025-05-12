@@ -38,7 +38,7 @@ You can contact these organisations:
 - Scope is a disability equality charity who can give you guidance on [how to ask for changes and what to do if your employer says no](https://scope.org.uk/advice-and-support/reasonable-adjustments-at-work/)
 - ACAS is a public body that can give you free, impartial advice on workplace rights including [asking for reasonable adjustments](https://acas.org.uk/reasonable-adjustments/).
 
-### If you’re self-employed or run a business
+### If you are self-employed or run a business
 
 If you’re a sole trader or limited company director and cannot return to work, you may need to:
 

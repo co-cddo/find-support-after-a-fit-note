@@ -14,11 +14,11 @@ You can get a fit note from a healthcare professional, such as your GP, if you�
 
 A fit note is a statement from a doctor that says whether you’re well enough to work. You’ll get one if your doctor thinks your health affects your ability to work.
 
-### If you’re employed
+### If you are employed
 
 You need to give your fit note to your employer as soon as possible. You can scan it and email it, or send a digital copy.
 
-### If you’re self-employed or run a limited company
+### If you are self-employed or run a limited company
 
 You do not need to give the fit note to an employer. But you may need it to support a benefits claim, such as Universal Credit or Employment and Support Allowance.
 

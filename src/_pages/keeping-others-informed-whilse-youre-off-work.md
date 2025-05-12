@@ -12,7 +12,7 @@ tags: fitnote
 
 You may need to stay in touch with people while you are off work. Who you contact and what you tell them depends on how you work.
 
-### If you’re employed
+### If you are employed
 
 Your employer may contact you while you’re off. The contact should be:
 
@@ -33,7 +33,7 @@ ACAS is a public body that provides free and impartial advice on workplace right
 
 [Advice on keeping in touch during sick leave (ACAS)](https://acas.org.uk/keeping-in-touch-during-absence/)
 
-### If you’re self-employed or run a business
+### If you are self-employed or run a business
 
 If you’re self-employed, a sole trader or run a limited company, you may need to:
 

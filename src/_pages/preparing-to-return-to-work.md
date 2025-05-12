@@ -31,7 +31,7 @@ If your job involves safety rules, for example, if you drive a lorry or bus, [ch
 
  If your employer is considering ending your employment while you’re off sick, [read about your rights while off work sick](https://gov.uk/time-off-for-dependants/).
 
-### If you’re self-employed or run a business
+### If you are self-employed or run a business
 
 If you’re a sole trader or run your own limited company, you won’t have an employer to talk to, but you might still need to:
 
