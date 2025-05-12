@@ -48,21 +48,7 @@ function trySendAnalytics() {
   }
 }
 
-
-
-
 // Delete cookie with both domain scopes
-// function deleteCookie(name) {
-//   // Remove production domain-level cookie
-//   if (cookieDomain) {
-//     document.cookie = `${name}=; path=/; domain=${cookieDomain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-//   }
-//   // Remove subdomain or local cookie
-//   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-// }
-
-
-
 function deleteCookie(name) {
 
   const domains = [
@@ -79,9 +65,6 @@ function deleteCookie(name) {
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 
 }
-
-
-
 
 // Delete all known analytics cookies
 function deleteAnalyticsCookies() {
