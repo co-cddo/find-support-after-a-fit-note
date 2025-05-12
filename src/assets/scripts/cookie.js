@@ -1,6 +1,13 @@
 window.dataLayer = window.dataLayer || [];
 
 // --- Helpers ---
+
+const isLocalhost = location.hostname === "localhost";
+const cookieDomain = isLocalhost ? undefined : "find-support-after-a-fit-note.digital.cabinet-office.gov.uk";
+const cookieSecure = !isLocalhost;
+const cookieSameSite = isLocalhost ? "Lax" : "None";
+
+// Get cookie value
 const getCookieValue = (name) => {
   const match = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
   return match?.pop() || "";
@@ -8,52 +15,32 @@ const getCookieValue = (name) => {
 
 // Google Analytics setup
 function gtag() {
-  dataLayer.push(arguments);
+  window.dataLayer.push(arguments);
 }
 
-// Load Google Analytics if not already loaded
-function loadGtagScript(callback) {
-  if (window.gtag) {
-    callback(); // gtag already loaded
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.src = "https://www.googletagmanager.com/gtag/js?id=G-LCRPJR51P6";
-  script.async = true;
-  script.onload = callback; // Call the callback once the script is loaded
-  document.head.appendChild(script);
-}
-
-// Initialize Analytics
+// Send analytics + load GTM only after consent
 function sendAnalytics() {
-  loadGtagScript(() => {
-    // Ensure the correct domain is set for GA cookies
-    gtag("js", new Date());
-    gtag('config', 'G-LCRPJR51P6', {
-      cookie_flags: 'secure;samesite=none',  // Set Secure and SameSite attributes
-      cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'  // Set domain for GA cookies
-    });
+  if (typeof gtag !== "function") return;
 
-    // Push analytics-enabled event to dataLayer
-    dataLayer.push({ event: "analytics_enabled" });
+  gtag("js", new Date());
+  gtag("config", "G-LCRPJR51P6");
 
-    // Load Google Tag Manager (GTM) script after GA setup
-    const gtmScript = document.createElement("script");
-    gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
-    gtmScript.async = true;
-    document.head.appendChild(gtmScript);
-  });
+  window.dataLayer.push({ event: "analytics_enabled" });
+
+  const gtmScript = document.createElement("script");
+  gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89";
+  gtmScript.async = true;
+  document.head.appendChild(gtmScript);
 }
 
-// Handle cookies and send analytics based on user preferences
+// Attempt analytics setup based on cookie
 function trySendAnalytics() {
   try {
     const value = getCookieValue("cookie-preferences");
     if (value) {
       const parsed = JSON.parse(value);
       if (parsed.analytics === "on") {
-        sendAnalytics(); // Only initialize GA if consent is "on"
+        sendAnalytics();
       }
     }
   } catch (err) {
@@ -61,11 +48,13 @@ function trySendAnalytics() {
   }
 }
 
-// Delete cookie with both domain scopes (to remove duplicates)
+// Delete cookie with both domain scopes
 function deleteCookie(name) {
-  // Remove exact subdomain cookie
-  document.cookie = `${name}=; path=/; domain=find-support-after-a-fit-note.digital.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-  // Remove fallback (no domain)
+  // Remove production domain-level cookie
+  if (cookieDomain) {
+    document.cookie = `${name}=; path=/; domain=${cookieDomain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  }
+  // Remove subdomain or local cookie
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 }
 
@@ -75,12 +64,13 @@ function deleteAnalyticsCookies() {
 }
 
 // --- Config ---
+
 const config = {
   userPreferences: {
     cookieName: "cookie-preferences",
     cookieExpiry: 365,
-    cookieSecure: location.protocol === "https:",
-    cookieSameSite: "Lax"
+    cookieSecure,
+    cookieSameSite
   },
   preferencesForm: {
     class: "cookie-preferences-form"
@@ -123,22 +113,23 @@ const config = {
 };
 
 // Set cookie with correct domain and attributes
-const setCookie = (name, value, days, secure, sameSite) => {
+const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? "Secure;" : "";
-  const domainFlag = "domain=find-support-after-a-fit-note.digital.cabinet-office.gov.uk;";
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
+  const domainFlag = domain ? `domain=${domain};` : "";
+  document.cookie = `${name}=${value}; ${domainFlag} expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
 // Store user preferences and ensure no duplicate cookies
 const setUserPreferences = (preferences) => {
-  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain first
+  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite
+    config.userPreferences.cookieSameSite,
+    cookieDomain
   );
 };
 
@@ -163,7 +154,8 @@ const triggerAnalyticsCallback = (eventData) => {
   }
 };
 
-// Init on DOM ready
+// --- Init ---
+
 document.addEventListener("DOMContentLoaded", () => {
   if (window.cookieManager) {
     window.cookieManager.on("PreferenceFormSubmitted", () => {
@@ -176,10 +168,9 @@ document.addEventListener("DOMContentLoaded", () => {
       trySendAnalytics();
     });
 
-    // Try to configure domain-wide cookies in cookieManager (if supported)
     if (typeof window.cookieManager.setConfig === "function") {
       window.cookieManager.setConfig({
-        cookieDomain: "find-support-after-a-fit-note.digital.cabinet-office.gov.uk"
+        cookieDomain: cookieDomain
       });
     }
 
