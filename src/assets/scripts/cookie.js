@@ -159,9 +159,37 @@ const triggerAnalyticsCallback = (eventData) => {
   }
 };
 
+// --- Force correct domain on cookie-preferences ---
+
+(function() {
+  const originalCookieDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') || Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
+
+  if (originalCookieDescriptor && originalCookieDescriptor.set) {
+    Object.defineProperty(document, 'cookie', {
+      configurable: true,
+      enumerable: true,
+      get: function() {
+        return originalCookieDescriptor.get.call(document);
+      },
+      set: function(value) {
+
+        // Only intercept cookie-preferences if domain is missing
+        if (!isLocalhost && value.startsWith("cookie-preferences=") && !/domain=/.test(value)) {
+          value += "; domain=.cabinet-office.gov.uk";
+        }
+        originalCookieDescriptor.set.call(document, value);
+      }
+    });
+  }
+})();
+
 // --- Init ---
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Clear any wrong-domain cookies just in case
+  deleteCookie("cookie-preferences");
+
   if (window.cookieManager) {
     window.cookieManager.on("PreferenceFormSubmitted", () => {
       reloadCallback();
