@@ -93,11 +93,18 @@ var config = {
   }
 };
 
-// Set cookies with SameSite attribute
-const setCookie = (name, value, days, secure, sameSite) => {
+// Determine domain for cookies
+const getCookieDomain = () => {
+  const currentDomain = location.hostname;
+  return currentDomain.endsWith('.cabinet-office.gov.uk') ? '.cabinet-office.gov.uk' : undefined;
+};
+
+// Set cookies with domain and SameSite
+const setCookie = (name, value, days, secure, sameSite, domain = getCookieDomain()) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+  const domainPart = domain ? `domain=${domain}; ` : '';
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainPart}${secureFlag}SameSite=${sameSite}`;
 };
 
 // Set user preferences
@@ -122,13 +129,11 @@ const reloadCallback = function(eventData) {
 // Handle banner action callback
 const triggerAnalyticsCallback = function(eventData) {
   if (eventData === 'accept') {
-    // User accepts, load analytics and set cookie
     sendAnalytics();
-    setUserPreferences({ analytics: 'on' }); // Set preferences to 'on' when accepted
+    setUserPreferences({ analytics: 'on' });
   } else if (eventData === 'reject') {
-    // User rejects, remove analytics and set cookie
     removeAnalytics();
-    setUserPreferences({ analytics: 'off' }); // Set preferences to 'off' when rejected
+    setUserPreferences({ analytics: 'off' });
   }
 };
 
@@ -140,7 +145,6 @@ window.cookieManager.init(config);
 // If no cookie preferences are set, show the banner
 if (!getCookieValue('cookie-preferences')) {
   // No preferences set, so the banner will show.
-  // Don't set the cookie initially, only after user interaction.
 }
 
 // Apply analytics based on existing cookie
@@ -149,7 +153,7 @@ try {
   if (cookieValue) {
     const parsed = JSON.parse(cookieValue);
     if (parsed.analytics === 'on') {
-      sendAnalytics(); // Send analytics if 'on' preference is set
+      sendAnalytics();
     }
   }
 } catch (err) {
