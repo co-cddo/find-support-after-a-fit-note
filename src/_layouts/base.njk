@@ -45,9 +45,9 @@
 	<link rel="stylesheet" href="{{ '/assets/styles/app.css' | url }}">
 
   {# Cookies in production #}
-  {# {% if (meta.siteEnvironment === "production") %} #}
+  {% if (meta.siteEnvironment === "production") %}
     <script rel="preload" src="https://googletagmanager.com/gtag/js?id=G-LCRPJR51P6" defer></script>
-  {# {% endif %} #}
+  {% endif %}
 
 </head>
 
@@ -77,7 +77,7 @@
       tag: {
         text: "Prototype"
       },
-      html: "This is a prototype for research purposes only. Please help us improve it by <a class=\"govuk-link govuk-link--no-visited-state\" href=\"#0\">sharing your feedback</a>."
+      html: "This is a prototype for research purposes only. Please help us improve it by <a class=\"govuk-link govuk-link--no-visited-state\" href=\"https://docs.google.com/forms/d/1viJKVBA7jRDsRVVOY2_l3Sl4Rz9vlRLf8aIyVCuKhIY/\">sharing your feedback</a>."
     }) }}
 
   </div>
@@ -110,10 +110,10 @@
   {% endblock %}
 
   {# Cookies in production #}
-  {# {% if (meta.siteEnvironment === "production") %} #}
+  {% if (meta.siteEnvironment === "production") %}
     <script src="{{ '/assets/scripts/cookie-manager.js' | url }}"></script>
     <script src="{{ '/assets/scripts/cookie.js' | url }}"></script>
-  {# {% endif %} #}
+  {% endif %}
   
   {% block bodyEnd %}{% endblock %}
 
