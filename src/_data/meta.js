@@ -4,7 +4,7 @@ const pathPrefix = process.env.ELEVENTY_PATH_PREFIX || "/";
 // Ensure trailing slash is removed from baseURL (for clean joins)
 const baseURL =
   eleventyEnv === "production"
-    ? "https://find-suppport-after-a-fit-note.digital.cabinet-office.gov.uk"
+    ? "https://find-support-after-a-fit-note.digital.cabinet-office.gov.uk"
     : "http://localhost:8080";
 
 // Useful for metadata like Open Graph
