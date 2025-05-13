@@ -32,7 +32,7 @@ function sendAnalytics() {
   document.head.appendChild(gtmScript);
 }
 
-// Delete cookies with specified names (for analytics cookies)
+// Delete cookies with specified names for the correct domain
 function deleteCookies(cookieNames) {
   cookieNames.forEach((cookieName) => {
     const domains = [
@@ -61,11 +61,11 @@ const setCookie = (name, value, days, secure, sameSite, domain) => {
 const setUserPreferences = (preferences) => {
   // Set the cookie only when a user has accepted or rejected cookies
   setCookie(
-    config.userPreferences.cookieName,
+    "cookie-preferences",
     JSON.stringify(preferences),
-    config.userPreferences.cookieExpiry,
-    config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite,
+    365, // expiry
+    cookieSecure,
+    cookieSameSite,
     cookieDomain
   );
 };
