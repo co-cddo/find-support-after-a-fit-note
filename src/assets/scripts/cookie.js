@@ -3,7 +3,7 @@ window.dataLayer = window.dataLayer || [];
 // --- Helpers ---
 
 const isLocalhost = location.hostname === "localhost";
-const cookieDomain = isLocalhost ? undefined : "find-support-after-a-fit-note.digital.cabinet-office.gov.uk";
+const cookieDomain = isLocalhost ? undefined : ".cabinet-office.gov.uk";
 const cookieSecure = !isLocalhost;
 const cookieSameSite = isLocalhost ? "Lax" : "None";
 
@@ -48,22 +48,13 @@ function trySendAnalytics() {
   }
 }
 
-// Delete cookie with both domain scopes
+// ✅ Delete cookie for shared domain only
 function deleteCookie(name) {
+  // Delete cookie on shared domain
+  document.cookie = `${name}=; path=/; domain=.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 
-  const domains = [
-    location.hostname, // e.g. find-support-after-a-fit-note.digital.cabinet-office.gov.uk
-    "." + location.hostname.replace(/^find-support-after-a-fit-note\./, ""), // e.g. .digital.cabinet-office.gov.uk
-    ".cabinet-office.gov.uk"
-  ];
-
-  domains.forEach((domain) => {
-    document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-  });
-
-  // Try without a domain too (defaults to current domain)
+  // Delete cookie without domain (just in case)
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-
 }
 
 // Delete all known analytics cookies
@@ -130,7 +121,7 @@ const setCookie = (name, value, days, secure, sameSite, domain) => {
 
 // Store user preferences and ensure no duplicate cookies
 const setUserPreferences = (preferences) => {
-  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain
+  deleteCookie(config.userPreferences.cookieName); // clear for shared domain
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
