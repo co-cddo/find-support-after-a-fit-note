@@ -48,12 +48,18 @@ function trySendAnalytics() {
   }
 }
 
-// ✅ Delete cookie for shared domain only
+// Delete cookie with both domain scopes
 function deleteCookie(name) {
-  // Delete cookie on shared domain
-  document.cookie = `${name}=; path=/; domain=.cabinet-office.gov.uk; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  const domains = [
+    location.hostname,
+    ".cabinet-office.gov.uk"
+  ];
 
-  // Delete cookie without domain (just in case)
+  domains.forEach((domain) => {
+    document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  });
+
+  // Try without a domain too (just in case)
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 }
 
@@ -121,7 +127,7 @@ const setCookie = (name, value, days, secure, sameSite, domain) => {
 
 // Store user preferences and ensure no duplicate cookies
 const setUserPreferences = (preferences) => {
-  deleteCookie(config.userPreferences.cookieName); // clear for shared domain
+  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
