@@ -1,7 +1,6 @@
 window.dataLayer = window.dataLayer || [];
 
 // --- Helpers ---
-
 const isLocalhost = location.hostname === "localhost";
 const cookieDomain = isLocalhost ? undefined : ".cabinet-office.gov.uk";
 const cookieSecure = !isLocalhost;
@@ -33,43 +32,89 @@ function sendAnalytics() {
   document.head.appendChild(gtmScript);
 }
 
-// Attempt analytics setup based on cookie
-function trySendAnalytics() {
-  try {
-    const value = getCookieValue("cookie-preferences");
-    if (value) {
-      const parsed = JSON.parse(value);
-      if (parsed.analytics === "on") {
-        sendAnalytics();
-      }
-    }
-  } catch (err) {
-    console.error("Error parsing cookie preferences:", err);
-  }
-}
+// Delete cookies with specified names (for analytics cookies)
+function deleteCookies(cookieNames) {
+  cookieNames.forEach((cookieName) => {
+    const domains = [
+      location.hostname,
+      ".cabinet-office.gov.uk"
+    ];
 
-// Delete cookie with both domain scopes
-function deleteCookie(name) {
-  const domains = [
-    location.hostname,
-    ".cabinet-office.gov.uk"
-  ];
+    domains.forEach((domain) => {
+      document.cookie = `${cookieName}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+    });
 
-  domains.forEach((domain) => {
-    document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+    // Try without a domain too (just in case)
+    document.cookie = `${cookieName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
   });
-
-  // Try without a domain too (just in case)
-  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 }
 
-// Delete all known analytics cookies
-function deleteAnalyticsCookies() {
-  ["_ga", "_gid", "_ga_ID", "analytics", "cookie-preferences"].forEach(deleteCookie);
-}
+// Set cookie with correct domain and attributes
+const setCookie = (name, value, days, secure, sameSite, domain) => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  const secureFlag = secure ? "Secure;" : "";
+  const domainFlag = domain ? `domain=${domain};` : "";
+  document.cookie = `${name}=${value}; ${domainFlag} expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+};
+
+// Store user preferences and ensure no duplicate cookies
+const setUserPreferences = (preferences) => {
+  // Set the cookie only when a user has accepted or rejected cookies
+  setCookie(
+    config.userPreferences.cookieName,
+    JSON.stringify(preferences),
+    config.userPreferences.cookieExpiry,
+    config.userPreferences.cookieSecure,
+    config.userPreferences.cookieSameSite,
+    cookieDomain
+  );
+};
+
+// Show success banner
+const reloadCallback = () => {
+  const successBanner = document.querySelector(".cookie-banner-success");
+  if (successBanner) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    successBanner.removeAttribute("hidden");
+    successBanner.focus();
+  }
+};
+
+// Handle analytics based on banner action
+const triggerAnalyticsCallback = (eventData) => {
+  if (eventData === "accept") {
+    setUserPreferences({ analytics: "on" });
+    sendAnalytics();
+  } else if (eventData === "reject") {
+    setUserPreferences({ analytics: "off" });
+    deleteCookies(["_ga", "_gid", "_ga_ID", "analytics"]);
+  }
+};
+
+// --- Force correct domain on cookie-preferences ---
+(function() {
+  const originalCookieDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
+                                    Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
+
+  if (originalCookieDescriptor && originalCookieDescriptor.set) {
+    Object.defineProperty(document, 'cookie', {
+      configurable: true,
+      enumerable: true,
+      get: function() {
+        return originalCookieDescriptor.get.call(document);
+      },
+      set: function(value) {
+        // Only intercept cookie-preferences if domain is missing or incorrect
+        if (value.startsWith("cookie-preferences=") && !/domain=/.test(value)) {
+          value += "; domain=.cabinet-office.gov.uk";
+        }
+        originalCookieDescriptor.set.call(document, value);
+      }
+    });
+  }
+})();
 
 // --- Config ---
-
 const config = {
   userPreferences: {
     cookieName: "cookie-preferences",
@@ -117,78 +162,20 @@ const config = {
   }
 };
 
-// Set cookie with correct domain and attributes
-const setCookie = (name, value, days, secure, sameSite, domain) => {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  const secureFlag = secure ? "Secure;" : "";
-  const domainFlag = domain ? `domain=${domain};` : "";
-  document.cookie = `${name}=${value}; ${domainFlag} expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
-};
-
-// Store user preferences and ensure no duplicate cookies
-const setUserPreferences = (preferences) => {
-  deleteCookie(config.userPreferences.cookieName); // clear both domain + subdomain
-  setCookie(
-    config.userPreferences.cookieName,
-    JSON.stringify(preferences),
-    config.userPreferences.cookieExpiry,
-    config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite,
-    cookieDomain
-  );
-};
-
-// Show success banner
-const reloadCallback = () => {
-  const successBanner = document.querySelector(".cookie-banner-success");
-  if (successBanner) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    successBanner.removeAttribute("hidden");
-    successBanner.focus();
-  }
-};
-
-// Handle analytics based on banner action
-const triggerAnalyticsCallback = (eventData) => {
-  if (eventData === "accept") {
-    setUserPreferences({ analytics: "on" });
-    sendAnalytics();
-  } else if (eventData === "reject") {
-    setUserPreferences({ analytics: "off" });
-    deleteAnalyticsCookies();
-  }
-};
-
-// --- Force correct domain on cookie-preferences ---
-
-(function() {
-  const originalCookieDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') || Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
-
-  if (originalCookieDescriptor && originalCookieDescriptor.set) {
-    Object.defineProperty(document, 'cookie', {
-      configurable: true,
-      enumerable: true,
-      get: function() {
-        return originalCookieDescriptor.get.call(document);
-      },
-      set: function(value) {
-
-        // Only intercept cookie-preferences if domain is missing
-        if (!isLocalhost && value.startsWith("cookie-preferences=") && !/domain=/.test(value)) {
-          value += "; domain=.cabinet-office.gov.uk";
-        }
-        originalCookieDescriptor.set.call(document, value);
-      }
-    });
-  }
-})();
-
 // --- Init ---
-
 document.addEventListener("DOMContentLoaded", () => {
-
-  // Clear any wrong-domain cookies just in case
-  deleteCookie("cookie-preferences");
+  // Check if cookie exists already, and if it's set to correct domain
+  const cookieValue = getCookieValue("cookie-preferences");
+  if (cookieValue) {
+    try {
+      const preferences = JSON.parse(cookieValue);
+      if (preferences.analytics === "on") {
+        sendAnalytics();
+      }
+    } catch (e) {
+      console.error("Failed to parse cookie-preferences:", e);
+    }
+  }
 
   if (window.cookieManager) {
     window.cookieManager.on("PreferenceFormSubmitted", () => {
