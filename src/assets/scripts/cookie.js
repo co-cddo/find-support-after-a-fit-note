@@ -81,7 +81,7 @@ const reloadCallback = () => {
 };
 
 // Handle analytics based on banner action
-const triggerAnalyticsCallback = (eventData) => {
+const handleAnalyticsCallback = (eventData) => {
   if (eventData === "accept") {
     setUserPreferences({ analytics: "on" });
     sendAnalytics();
@@ -180,12 +180,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.cookieManager) {
     window.cookieManager.on("PreferenceFormSubmitted", () => {
       reloadCallback();
-      trySendAnalytics();
+      handleAnalyticsCallback("accept");
     });
 
     window.cookieManager.on("CookieBannerAction", (eventData) => {
-      triggerAnalyticsCallback(eventData);
-      trySendAnalytics();
+      handleAnalyticsCallback(eventData);
+      reloadCallback();
     });
 
     if (typeof window.cookieManager.setConfig === "function") {
@@ -197,6 +197,18 @@ document.addEventListener("DOMContentLoaded", () => {
     window.cookieManager.init(config);
   }
 
-  // Fallback check
-  setTimeout(trySendAnalytics, 100);
+  // Fallback check for initial analytics send
+  setTimeout(() => {
+    const cookieValue = getCookieValue("cookie-preferences");
+    if (cookieValue) {
+      try {
+        const preferences = JSON.parse(cookieValue);
+        if (preferences.analytics === "on") {
+          sendAnalytics();
+        }
+      } catch (e) {
+        console.error("Error checking cookies:", e);
+      }
+    }
+  }, 100);
 });
