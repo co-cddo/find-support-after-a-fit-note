@@ -12,22 +12,24 @@
   <meta charset="utf-8">
 
   {% if tags | includes("fitnote") %}
-    <title>{{ meta.serviceName }}{% if "fitnote" %}: {{ title }}{% endif %} - {{ meta.siteName }}</title>
+    {% set pageTitle = meta.serviceName + ': ' + title + ' - ' + meta.siteName %}
   {% else %}
-    <title>{{ title }} - {{ meta.siteName }}</title>
+    {% set pageTitle = title + ' - ' + meta.siteName %}
   {% endif %}
+
+  <title>{{ pageTitle }}</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="{{ themeColor | default('#0b0c0c', true) }}">
 
   {# Open Graph metadata #}
-  <meta property="og:title" content="{{ meta.serviceName }} - {{ meta.siteName }}">
+  <meta property="og:title" content="{{ pageTitle }}">
   <meta property="og:description" content="{{ meta.siteDescription | default('Get help if you’re taking time off work due to a health condition') }}">
   <meta property="og:image" content="{{ meta.siteOgImage }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/png">
-  <meta property="og:url" content="{{ meta.siteURL }}{{ page.url }}">
+  <meta property="og:url" content="{{ meta.fullSiteUrl }}{{ page.url }}">
   <meta property="og:type" content="website">
 
   {# Canonical #}
