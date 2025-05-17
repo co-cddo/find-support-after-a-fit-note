@@ -4,7 +4,7 @@ title: Accessibility statement
 permalink: /accessibility-statement/
 ---
 
-# Accessibility
+# Accessibility statement
 
 This website is run by Government Digital Service. We want as many people as possible to be able to use this website. For example, that means you should be able to:
 

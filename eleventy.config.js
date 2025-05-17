@@ -48,6 +48,7 @@ module.exports = async function (eleventyConfig) {
   require("./config/filters/flatten-navigation.js")(eleventyConfig);
   require("./config/filters/markdown-path-prefix.js")(eleventyConfig);
   require("./config/filters/find-by-url.js")(eleventyConfig);
+  require("./config/filters/includes.js")(eleventyConfig);
 
 
   // Plugins

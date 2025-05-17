@@ -1,6 +1,6 @@
 ---
 layout: cookies.njk
-title: Cookies
+title: Cookies and privacy policy
 permalink: /cookies-and-privacy-policy/
 ---
 
