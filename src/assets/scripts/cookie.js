@@ -39,6 +39,10 @@ function removeAnalytics() {
   document.cookie = '_ga=; Max-Age=0; path=/;';
   document.cookie = '_gid=; Max-Age=0; path=/;';
   document.cookie = 'analytics=; Max-Age=0; path=/;';
+  document.cookie = '_clck=; Max-Age=0; path=/;';
+  document.cookie = '_clsk=; Max-Age=0; path=/;';
+  document.cookie = 'CLID=; Max-Age=0; path=/;';
+  document.cookie = 'MUID=; Max-Age=0; path=/;';
 }
 
 // Send analytics and load GTM
@@ -84,7 +88,11 @@ var config = {
       cookies: [
         'analytics',
         '_ga',
-        '_gid'
+        '_gid',
+        '_clck',
+        '_clsk',
+        'CLID',
+        'MUID'
       ]
     }
   ],

@@ -8,7 +8,7 @@ permalink: /cookies-and-privacy-policy/
 
 Cookies are small files saved on your phone, tablet or computer when you visit a website.
 
-We use cookies to make the **Find support after a fit note** prototype work properly and to understand how people use these pages, so we can improve the content.
+We use cookies to make the Find support after a fit note prototype work properly and to understand how people use these pages, so we can improve the content.
 
 ## Essential cookies
 
@@ -41,7 +41,7 @@ This helps us understand what’s working well and what we could improve. Google
 
 ## Managing your cookie preferences
 
-When you visit **Find support after a fit note**, we will ask if you want to accept analytics cookies.
+When you visit Find support after a fit note, we will ask if you want to accept analytics cookies.
 
 Your preferences are stored using Google’s Consent Mode. This ensures that data is only collected if you agree.
 
