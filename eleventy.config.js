@@ -49,6 +49,7 @@ module.exports = async function (eleventyConfig) {
   require("./config/filters/markdown-path-prefix.js")(eleventyConfig);
   require("./config/filters/find-by-url.js")(eleventyConfig);
   require("./config/filters/includes.js")(eleventyConfig);
+  require("./config/filters/dates.js")(eleventyConfig);
 
 
   // Plugins
