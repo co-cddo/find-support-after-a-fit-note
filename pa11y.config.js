@@ -1,8 +1,9 @@
 const fs = require("fs");
 const path = require("path");
+const pa11y = require("pa11y");
 
-// Set the base URL for local testing
-const baseUrl = "http://localhost:8080";  // Use this for local testing
+const baseUrl = "http://localhost:8080";
+const htmlDir = path.join(__dirname, "public");
 
 function getHtmlFiles(dir) {
   const files = fs.readdirSync(dir);
@@ -15,7 +16,7 @@ function getHtmlFiles(dir) {
     if (stat.isDirectory()) {
       urls = urls.concat(getHtmlFiles(fullPath));
     } else if (file.endsWith(".html")) {
-      const relativePath = path.relative("public", fullPath);
+      const relativePath = path.relative(htmlDir, fullPath);
       const urlPath = relativePath.replace(/\\/g, "/");
       urls.push(`${baseUrl}/${urlPath}`);
     }
@@ -24,12 +25,27 @@ function getHtmlFiles(dir) {
   return urls;
 }
 
-module.exports = {
-  standard: "WCAG2AAA",
-  level: "error",
-  defaults: {
-    timeout: 5000,
-    threshold: 2
-  },
-  urls: process.env.NODE_ENV === "development" ? getHtmlFiles(path.join(__dirname, "public")) : []  // Only run tests locally
-};
+(async () => {
+  const urls = getHtmlFiles(htmlDir);
+
+  for (const url of urls) {
+    console.log(`🔍 Testing: ${url}`);
+    try {
+      const result = await pa11y(url, {
+        standard: 'WCAG2AA',
+        timeout: 5000
+      });
+
+      if (result.issues.length > 0) {
+        console.log(`❌ Issues at ${url}:`);
+        result.issues.forEach(issue => {
+          console.log(`  - [${issue.code}] ${issue.message} at ${issue.selector}`);
+        });
+      } else {
+        console.log(`✅ No issues found at ${url}`);
+      }
+    } catch (err) {
+      console.error(`🚨 Error testing ${url}:\n`, err.message);
+    }
+  }
+})();
