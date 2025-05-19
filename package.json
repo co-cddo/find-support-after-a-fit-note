@@ -12,8 +12,7 @@
     "watch:eleventy": "eleventy --serve",
     "clean": "rimraf public/",
     "purgecss": "npx purgecss -c purgecss.config.js",
-    "pa11y": "pa11y-ci --config pa11y.config.js --reporter cli",
-    "test:pa11y": "pa11y-ci --config pa11y.config.js"
+    "test:pa11y": "node pa11y.config.js"
   },
   "author": "Trevor Saint",
   "license": "ISC",
