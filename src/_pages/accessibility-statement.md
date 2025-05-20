@@ -21,7 +21,9 @@ We’ve also made the website text as simple as possible to understand.
 
 ## Reporting accessibility problems with this website
 
-We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact: [provide both details of how to report these issues to your organisation, and contact details for the unit or person responsible for dealing with these reports].
+We are always looking to improve the accessibility of this website.
+
+If you find any problems not listed on this page or think we are not meeting accessibility requirements, email: [health-work-research@digital.cabinet-office.gov.uk](mailto:health-work-research@digital.cabinet-office.gov.uk)
 
 ### Enforcement procedure
 
