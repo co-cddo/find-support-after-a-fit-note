@@ -8,7 +8,7 @@ permalink: /cookies-and-privacy-policy/
 
 Cookies are small files saved on your phone, tablet or computer when you visit a website.
 
-We use cookies to make the **Find support after a fit note** prototype work properly and to understand how people use these pages, so we can improve the content.
+We use cookies to make the Find support after a fit note prototype work properly and to understand how people use these pages, so we can improve the content.
 
 ## Essential cookies
 
@@ -22,14 +22,15 @@ Essential cookies help keep the prototype running properly. We do not need to as
 
 ## Analytics cookies (optional)
 
-With your permission, we use Google Analytics (GA4) to collect information about how you use the service.
+With your permission, we use Google Analytics (GA4) and MS Clarity to collect information about how you use the service.
 
-This helps us understand what’s working well and what we could improve. Google cannot use or share this data with anyone.
+This helps us understand what’s working well and what we could improve. Google and MS Clarity cannot use or share this data with anyone.
 
 **Google Analytics collects anonymised information about:**
 - how you arrived at the service
 - which pages you visit and how long you spend on them
 - what you click on and how far you scroll
+- interactions like mouse movements, clicks and scrolling
 - if and when you submit any forms
 
 **Analytics cookies we use:**
@@ -38,10 +39,12 @@ This helps us understand what’s working well and what we could improve. Google
 |------|----------------------------------------------------------------------------------------|----------|
 | _ga  | Helps us count how many people visit this website by tracking if you’ve visited before | 2 years  |
 | _gid | Tracks an individual session on your device to understand user journeys                | 24 hours |
+| CLID | This checks if you have used MS Clarity before                                         | 1 year   |
+| MUID | This helps with things like advertising and site analytics                             | 2 years  |
 
 ## Managing your cookie preferences
 
-When you visit **Find support after a fit note**, we will ask if you want to accept analytics cookies.
+When you visit Find support after a fit note, we will ask if you want to accept analytics cookies.
 
 Your preferences are stored using Google’s Consent Mode. This ensures that data is only collected if you agree.
 
