@@ -39,6 +39,11 @@ function removeAnalytics() {
   document.cookie = '_ga=; Max-Age=0; path=/;';
   document.cookie = '_gid=; Max-Age=0; path=/;';
   document.cookie = 'analytics=; Max-Age=0; path=/;';
+
+  // Cleanup legacy cookies from .cabinet-office.gov.uk
+  document.cookie = '_ga=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
+  document.cookie = '_ga_LCRPJR51P6=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
+
 }
 
 // Send analytics and load GTM
