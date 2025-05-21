@@ -26,24 +26,25 @@ function loadGTM() {
   }
 }
 
-// Remove GTM and clear dataLayer
+// Remove analytics and legacy preference cookies
 function removeAnalytics() {
   const gtmScript = document.getElementById('gtm-script');
   if (gtmScript) gtmScript.remove();
 
   if (window.dataLayer) {
-    window.dataLayer.length = 0; // Clear the dataLayer
+    window.dataLayer.length = 0;
   }
 
-  // Optionally remove cookies that were set for GA or GTM
+  // Remove Google Analytics cookies
   document.cookie = '_ga=; Max-Age=0; path=/;';
   document.cookie = '_gid=; Max-Age=0; path=/;';
-  document.cookie = 'analytics=; Max-Age=0; path=/;';
-
-  // Cleanup legacy cookies from .cabinet-office.gov.uk
+  document.cookie = '_ga_LCRPJR51P6=; Max-Age=0; path=/;';
   document.cookie = '_ga=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
   document.cookie = '_ga_LCRPJR51P6=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
 
+  // Remove both versions of cookie-preferences
+  document.cookie = 'cookie-preferences=; Max-Age=0; path=/;';
+  document.cookie = 'cookie-preferences=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
 }
 
 // Send analytics and load GTM
@@ -106,20 +107,27 @@ const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
   const domainPart = domain ? `domain=${domain};` : '';
-  document.cookie = `${name}=${value}; ${domainPart} expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainPart} ${secureFlag} SameSite=${sameSite}`;
 };
 
 // Set user preferences
 const setUserPreferences = (preferences) => {
+
+  // Remove any old cookie set without a domain (scoped to the subdomain)
+  document.cookie = `${config.userPreferences.cookieName}=; Max-Age=0; path=/;`;
+
+  // Set domain-wide cookie
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
     config.userPreferences.cookieSameSite,
-    '.cabinet-office.gov.uk' // This makes it available to all subdomains
+    '.cabinet-office.gov.uk' // Always use domain-wide scope
   );
+
 };
+
 
 // Handle form submission callback
 const reloadCallback = function(eventData) {
