@@ -1,6 +1,6 @@
 {
   "name": "find-support-after-a-fit-note",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Get help if you’re taking time off work due to a health condition",
   "main": "eleventy.config.js",
   "scripts": {
