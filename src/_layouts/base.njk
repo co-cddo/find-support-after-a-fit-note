@@ -113,10 +113,10 @@
   {% endblock %}
 
   {# Cookies in production #}
-  {# {% if (meta.siteEnvironment === "production") %} #}
+  {% if (meta.siteEnvironment === "production") %}
     <script src="{{ '/assets/scripts/cookie-manager.js' | url }}"></script>
     <script src="{{ '/assets/scripts/cookie.js' | url }}"></script>
-  {# {% endif %} #}
+  {% endif %}
   
   {% block bodyEnd %}{% endblock %}
 
