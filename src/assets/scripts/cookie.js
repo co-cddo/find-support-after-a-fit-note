@@ -42,9 +42,13 @@ function removeAnalytics() {
   document.cookie = '_ga=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
   document.cookie = '_ga_LCRPJR51P6=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
 
-  // Remove both versions of cookie-preferences
+  // Subdomain cookie
   document.cookie = 'cookie-preferences=; Max-Age=0; path=/;';
-  document.cookie = 'cookie-preferences=; Max-Age=0; domain=.cabinet-office.gov.uk; path=/;';
+  document.cookie = 'cookie-preferences=; Max-Age=0; path=/; domain=' + location.hostname;
+
+  // TLD cookie
+  document.cookie = 'cookie-preferences=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
+
 }
 
 // Send analytics and load GTM
