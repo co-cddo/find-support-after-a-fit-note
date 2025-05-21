@@ -1,34 +1,32 @@
 window.dataLayer = window.dataLayer || [];
 
-// The exact cookie domain to force on all cookies
-const COOKIE_DOMAIN = 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk';
-
-// Get cookie value by name (matches cookies on the current domain/subdomain)
+// Get cookie value
 const getCookieValue = (name) => (
   document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
 );
 
-// Helper to delete a cookie properly with domain and path
-function deleteCookie(name, domain = COOKIE_DOMAIN, path = '/') {
-  const domainPart = domain ? `domain=${domain};` : '';
-  // Secure and SameSite=Lax are good defaults for your context
-  document.cookie = `${name}=; Max-Age=0; path=${path}; ${domainPart} Secure; SameSite=Lax`;
+// Delete cookie helper — deletes with and without leading dot on domain
+function deleteCookie(name, domain, path = '/') {
+  if (!domain) {
+    document.cookie = `${name}=; Max-Age=0; path=${path}; Secure; SameSite=Lax`;
+    return;
+  }
+  // Remove leading dot from domain if present for setting cookies correctly
+  if (domain.startsWith('.')) domain = domain.slice(1);
+
+  // Delete cookie scoped to exact domain
+  document.cookie = `${name}=; Max-Age=0; path=${path}; domain=${domain}; Secure; SameSite=Lax`;
+
+  // Also delete cookie scoped to domain with leading dot (legacy cookies)
+  document.cookie = `${name}=; Max-Age=0; path=${path}; domain=.${domain}; Secure; SameSite=Lax`;
 }
 
-// Set cookies with SameSite attribute and explicit domain
-const setCookie = (name, value, days, secure, sameSite, domain = COOKIE_DOMAIN) => {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  const secureFlag = secure ? 'Secure;' : '';
-  const domainPart = domain ? `domain=${domain};` : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainPart}${secureFlag} SameSite=${sameSite}`;
-};
-
-// Google Analytics gtag function pushing to dataLayer
+// Google Analytics
 function gtag() {
   dataLayer.push(arguments);
 }
 
-// Inject Google Tag Manager script once
+// Inject Google Tag Manager
 function loadGTM() {
   if (!document.getElementById('gtm-script')) {
     const gtmScript = document.createElement('script');
@@ -44,7 +42,7 @@ function loadGTM() {
   }
 }
 
-// Remove analytics scripts and clear related cookies
+// Remove analytics and legacy preference cookies
 function removeAnalytics() {
   const gtmScript = document.getElementById('gtm-script');
   if (gtmScript) gtmScript.remove();
@@ -53,42 +51,25 @@ function removeAnalytics() {
     window.dataLayer.length = 0;
   }
 
-  // Remove Google Analytics cookies scoped to the exact domain
-  deleteCookie('_ga');
-  deleteCookie('_gid');
-  deleteCookie('_ga_LCRPJR51P6');
+  // Remove Google Analytics cookies for this exact subdomain and parent domain
+  // Note: Deleting parent domain cookies might not fully work if you don't have control over that domain
+  ['_ga', '_gid', '_ga_LCRPJR51P6'].forEach(name => {
+    deleteCookie(name, 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
+    deleteCookie(name, 'cabinet-office.gov.uk');
+  });
 
-  // Remove the cookie preferences cookie scoped to exact domain
-  deleteCookie('cookie-preferences');
+  // Remove user preference cookie for your subdomain (both dot and no-dot)
+  deleteCookie('cookie-preferences', 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
 }
 
 // Send analytics and load GTM
 function sendAnalytics() {
   gtag('js', new Date());
   gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: COOKIE_DOMAIN
+    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
   });
   loadGTM();
 }
-
-// Set user preferences cookie explicitly scoped to the full subdomain only
-const setUserPreferences = (preferences) => {
-  // Remove any old cookie WITHOUT domain (scoped to current host)
-  document.cookie = `${config.userPreferences.cookieName}=; Max-Age=0; path=/;`;
-
-  // Remove old cookie scoped to domain, just in case
-  deleteCookie(config.userPreferences.cookieName);
-
-  // Set new cookie scoped explicitly to the full subdomain domain
-  setCookie(
-    config.userPreferences.cookieName,
-    JSON.stringify(preferences),
-    config.userPreferences.cookieExpiry,
-    config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite,
-    COOKIE_DOMAIN
-  );
-};
 
 var config = {
   userPreferences: {
@@ -133,6 +114,32 @@ var config = {
     disableCookieBanner: false,
     disableCookiePreferencesForm: false
   }
+};
+
+// Set cookies with SameSite attribute and exact domain (no leading dot)
+const setCookie = (name, value, days, secure, sameSite, domain) => {
+  if (domain && domain.startsWith('.')) domain = domain.slice(1);
+
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  const secureFlag = secure ? 'Secure;' : '';
+  const domainPart = domain ? `domain=${domain};` : '';
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainPart}${secureFlag} SameSite=${sameSite}`;
+};
+
+// Set user preferences
+const setUserPreferences = (preferences) => {
+  // Remove old cookie without domain (subdomain scoped)
+  document.cookie = `${config.userPreferences.cookieName}=; Max-Age=0; path=/;`;
+
+  // Set domain-wide cookie scoped exactly to your subdomain (no leading dot)
+  setCookie(
+    config.userPreferences.cookieName,
+    JSON.stringify(preferences),
+    config.userPreferences.cookieExpiry,
+    config.userPreferences.cookieSecure,
+    config.userPreferences.cookieSameSite,
+    'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
+  );
 };
 
 // Handle form submission callback
