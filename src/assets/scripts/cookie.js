@@ -26,31 +26,54 @@ function loadGTM() {
   }
 }
 
-// Remove GTM and clear dataLayer
+// Inject Microsoft Clarity
+function loadClarity() {
+  if (!document.getElementById('clarity-script')) {
+    window.clarity = window.clarity || function() {
+      (window.clarity.q = window.clarity.q || []).push(arguments);
+    };
+    clarity('set', 'cookieDomain', 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
+
+    const clarityScript = document.createElement('script');
+    clarityScript.id = 'clarity-script';
+    clarityScript.type = 'text/javascript';
+    clarityScript.async = true;
+    clarityScript.src = 'https://www.clarity.ms/tag/rgthjyi5pn';
+    document.head.appendChild(clarityScript);
+  }
+}
+
+// Remove analytics and Clarity
 function removeAnalytics() {
   const gtmScript = document.getElementById('gtm-script');
   if (gtmScript) gtmScript.remove();
 
+  const clarityScript = document.getElementById('clarity-script');
+  if (clarityScript) clarityScript.remove();
+
   if (window.dataLayer) {
-    window.dataLayer.length = 0; // Clear the dataLayer
+    window.dataLayer.length = 0;
   }
 
-  // Optionally remove cookies that were set for GA or GTM
+  // Remove GA and Clarity cookies
   document.cookie = '_ga=; Max-Age=0; path=/;';
   document.cookie = '_gid=; Max-Age=0; path=/;';
   document.cookie = 'analytics=; Max-Age=0; path=/;';
+  document.cookie = '_clck=; Max-Age=0; path=/;';
+  document.cookie = '_clsk=; Max-Age=0; path=/;';
 }
 
-// Send analytics and load GTM
+// Send analytics and load tracking
 function sendAnalytics() {
   gtag('js', new Date());
   gtag('config', 'G-LCRPJR51P6', {
     cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
   });
   loadGTM();
+  loadClarity();
 }
 
-
+// Configuration
 var config = {
   userPreferences: {
     cookieName: 'cookie-preferences',
@@ -84,7 +107,9 @@ var config = {
       cookies: [
         'analytics',
         '_ga',
-        '_gid'
+        '_gid',
+        '_clck',
+        '_clsk'
       ]
     }
   ],
@@ -96,14 +121,14 @@ var config = {
   }
 };
 
-// Set cookies with SameSite attribute
+// Set cookies with SameSite
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
-// Set user preferences
+// Save user preferences
 const setUserPreferences = (preferences) => {
   setCookie(
     config.userPreferences.cookieName,
@@ -114,7 +139,7 @@ const setUserPreferences = (preferences) => {
   );
 };
 
-// Handle form submission callback
+// Handle form submitted
 const reloadCallback = function(eventData) {
   let successBanner = document.querySelector('.cookie-banner-success');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -122,16 +147,14 @@ const reloadCallback = function(eventData) {
   successBanner.focus();
 };
 
-// Handle banner action callback
+// Handle banner accept/reject
 const triggerAnalyticsCallback = function(eventData) {
   if (eventData === 'accept') {
-    // User accepts, load analytics and set cookie
     sendAnalytics();
-    setUserPreferences({ analytics: 'on' }); // Set preferences to 'on' when accepted
+    setUserPreferences({ analytics: 'on' });
   } else if (eventData === 'reject') {
-    // User rejects, remove analytics and set cookie
     removeAnalytics();
-    setUserPreferences({ analytics: 'off' }); // Set preferences to 'off' when rejected
+    setUserPreferences({ analytics: 'off' });
   }
 };
 
@@ -140,19 +163,18 @@ window.cookieManager.on('PreferenceFormSubmitted', reloadCallback);
 window.cookieManager.on('CookieBannerAction', triggerAnalyticsCallback);
 window.cookieManager.init(config);
 
-// If no cookie preferences are set, show the banner
+// Show banner if no preference set
 if (!getCookieValue('cookie-preferences')) {
-  // No preferences set, so the banner will show.
-  // Don't set the cookie initially, only after user interaction.
+  // No preferences set – banner will show
 }
 
-// Apply analytics based on existing cookie
+// Apply preferences if already set
 try {
   const cookieValue = getCookieValue('cookie-preferences');
   if (cookieValue) {
     const parsed = JSON.parse(cookieValue);
     if (parsed.analytics === 'on') {
-      sendAnalytics(); // Send analytics if 'on' preference is set
+      sendAnalytics();
     }
   }
 } catch (err) {
