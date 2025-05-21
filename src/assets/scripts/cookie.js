@@ -50,7 +50,7 @@ function removeAnalytics() {
 function sendAnalytics() {
   gtag('js', new Date());
   gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
+    cookie_domain: '.cabinet-office.gov.uk'
   });
   loadGTM();
 }
