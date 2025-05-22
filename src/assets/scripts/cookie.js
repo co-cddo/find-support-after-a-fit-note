@@ -24,7 +24,25 @@ function loadGTM() {
 }
 }
 
-function removeAnalytics() {}
+function removeAnalytics() {
+
+  const gtmScript = document.getElementById('gtm-script');
+  
+  if (gtmScript) gtmScript.remove();
+
+  if (window.dataLayer) {
+    window.dataLayer.length = 0; 
+  }
+
+
+  // Try removing specific cookies
+
+  // document.cookie = '_ga=; Max-Age=0; path=/;';
+
+  alert('Remove cookies')
+
+
+}
 
 function sendAnalytics() {
   gtag('js', new Date());
