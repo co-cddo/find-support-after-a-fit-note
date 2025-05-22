@@ -43,11 +43,13 @@ function loadClarity() {
   }
 }
 
-// Helper to delete cookies with domain and path
+// Helper to delete cookies with domain and path (corrected)
 const deleteCookie = (name, domain, path = '/') => {
-  const domainPart = domain ? `Domain=${domain}; ` : '';
-  const pathPart = path ? `Path=${path}; ` : '';
-  document.cookie = `${name}=; Max-Age=0; ${domainPart}${pathPart}SameSite=Lax; Secure;`;
+  // Domain attribute must start with dot for root domain cookies
+  const domainPart = domain ? `; domain=${domain}` : '';
+  const pathPart = path ? `; path=${path}` : '';
+  // Set expiration in the past to delete cookie
+  document.cookie = `${name}=; Max-Age=0${domainPart}${pathPart}; Secure; SameSite=Lax`;
 };
 
 // Remove analytics and clarity cookies + scripts
@@ -71,9 +73,9 @@ function removeAnalytics() {
   // Also remove some cookies without domain, just in case
   ['_clck', '_clsk', 'CLID', 'MUID'].forEach(name => deleteCookie(name));
 
-  // Remove cookie-preferences cookies on main and subdomain
+  // Remove cookie-preferences cookies on main domain and subdomain
   deleteCookie('cookie-preferences', '.cabinet-office.gov.uk');
-  deleteCookie('cookie-preferences', 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
+  deleteCookie('cookie-preferences', '.find-support-after-a-fit-note.digital.cabinet-office.gov.uk'); // note leading dot
   deleteCookie('cookie-preferences');
 }
 
@@ -131,11 +133,11 @@ var config = {
   }
 };
 
-// Set cookie with domain, path, secure, samesite, expiry
+// Set cookie with domain, path, secure, samesite, expiry (corrected domain syntax)
 const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure; ' : '';
-  const domainPart = domain ? `Domain=${domain}; ` : '';
+  const domainPart = domain ? `domain=${domain}; ` : '';
   document.cookie = `${name}=${value}; ${domainPart}Expires=${expires}; Path=/; ${secureFlag}SameSite=${sameSite}`;
 };
 
@@ -151,8 +153,8 @@ const setUserPreferences = (preferences) => {
   );
 
   // Remove any subdomain cookie-preferences to avoid conflicts
+  deleteCookie(config.userPreferences.cookieName, '.find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
   deleteCookie(config.userPreferences.cookieName);
-  deleteCookie(config.userPreferences.cookieName, 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
 };
 
 // Callback on form submitted (shows success banner)
