@@ -28,11 +28,13 @@ function loadGTM() {
 
 // Inject Microsoft Clarity
 function loadClarity() {
+
   if (!document.getElementById('clarity-script')) {
+
     window.clarity = window.clarity || function() {
       (window.clarity.q = window.clarity.q || []).push(arguments);
     };
-    clarity('set', 'cookieDomain', 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
+    clarity('set', 'cookieDomain', '.cabinet-office.gov.uk');
 
     const clarityScript = document.createElement('script');
     clarityScript.id = 'clarity-script';
@@ -41,6 +43,7 @@ function loadClarity() {
     clarityScript.src = 'https://www.clarity.ms/tag/rgthjyi5pn';
     document.head.appendChild(clarityScript);
   }
+
 }
 
 // Remove analytics and Clarity
@@ -56,9 +59,9 @@ function removeAnalytics() {
   }
 
   // Remove GA and Clarity cookies
-  document.cookie = 'analytics=; Max-Age=0; path=/;';
-  document.cookie = '_ga=; Max-Age=0; path=/;';
-  document.cookie = '_gid=; Max-Age=0; path=/;';
+  document.cookie = 'analytics=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk';
+  document.cookie = '_ga=; Max-Age=0; path=/; path=/; domain=.cabinet-office.gov.uk';
+  document.cookie = '_gid=; Max-Age=0; path=/; path=/; domain=.cabinet-office.gov.uk';
   document.cookie = '_clck=; Max-Age=0; path=/;';
   document.cookie = '_clsk=; Max-Age=0; path=/;';
   document.cookie = 'CLID=; Max-Age=0; path=/;';
@@ -69,7 +72,7 @@ function removeAnalytics() {
 function sendAnalytics() {
   gtag('js', new Date());
   gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
+    cookie_domain: '.cabinet-office.gov.uk'
   });
   loadGTM();
   loadClarity();
@@ -134,12 +137,18 @@ const setCookie = (name, value, days, secure, sameSite) => {
 
 // Save user preferences
 const setUserPreferences = (preferences) => {
+
+  const domain = location.hostname.endsWith('.cabinet-office.gov.uk')
+    ? '.cabinet-office.gov.uk'
+    : undefined;
+
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite
+    config.userPreferences.cookieSameSite,
+    domain
   );
 };
 
