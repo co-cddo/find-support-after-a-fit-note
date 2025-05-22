@@ -45,32 +45,29 @@ function loadClarity() {
 
 // Remove analytics and Clarity
 function removeAnalytics() {
-  const gtmScript = document.getElementById('gtm-script');
-  if (gtmScript) gtmScript.remove();
 
-  const clarityScript = document.getElementById('clarity-script');
-  if (clarityScript) clarityScript.remove();
+  // const gtmScript = document.getElementById('gtm-script');
+  // if (gtmScript) gtmScript.remove();
+
+  // const clarityScript = document.getElementById('clarity-script');
+  // if (clarityScript) clarityScript.remove();
 
   if (window.dataLayer) {
     window.dataLayer.length = 0;
   }
 
   // Remove GA and Clarity cookies
+  document.cookie = 'analytics=; Max-Age=0; path=/;';
   document.cookie = '_ga=; Max-Age=0; path=/;';
   document.cookie = '_gid=; Max-Age=0; path=/;';
-  document.cookie = 'analytics=; Max-Age=0; path=/;';
-  document.cookie = '_clck=; Max-Age=0; path=/;';
-  document.cookie = '_clsk=; Max-Age=0; path=/;';
 }
 
 // Send analytics and load tracking
 function sendAnalytics() {
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
-  });
-  loadGTM();
-  loadClarity();
+  gtag('config', 'G-LCRPJR51P6');
+  // loadGTM();
+  // loadClarity();
 }
 
 // Configuration
@@ -107,9 +104,7 @@ var config = {
       cookies: [
         'analytics',
         '_ga',
-        '_gid',
-        '_clck',
-        '_clsk'
+        '_gid'
       ]
     }
   ],
@@ -162,11 +157,6 @@ const triggerAnalyticsCallback = function(eventData) {
 window.cookieManager.on('PreferenceFormSubmitted', reloadCallback);
 window.cookieManager.on('CookieBannerAction', triggerAnalyticsCallback);
 window.cookieManager.init(config);
-
-// Show banner if no preference set
-if (!getCookieValue('cookie-preferences')) {
-  // No preferences set – banner will show
-}
 
 // Apply preferences if already set
 try {
