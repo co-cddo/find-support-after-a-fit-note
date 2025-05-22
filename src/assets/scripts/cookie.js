@@ -58,16 +58,19 @@ function removeAnalytics() {
 
   // Remove GA and Clarity cookies
   document.cookie = 'analytics=; Max-Age=0; path=/;';
-  document.cookie = '_ga=; Max-Age=0; path=/;';
-  document.cookie = '_gid=; Max-Age=0; path=/;';
+
+  // document.cookie = '_ga=; Max-Age=0; path=/;';
+  // document.cookie = '_gid=; Max-Age=0; path=/;';
+
+  document.cookie = '_ga=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
+  document.cookie = '_gid=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
+
 }
 
 // Send analytics and load tracking
 function sendAnalytics() {
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
-  });
+  gtag('config', 'G-LCRPJR51P6');
   // loadGTM();
   // loadClarity();
 }
