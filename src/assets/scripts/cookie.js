@@ -117,11 +117,19 @@ var config = {
 };
 
 // Set cookies with SameSite
-const setCookie = (name, value, days, secure, sameSite) => {
+// const setCookie = (name, value, days, secure, sameSite) => {
+//   const expires = new Date(Date.now() + days * 864e5).toUTCString();
+//   const secureFlag = secure ? 'Secure;' : '';
+//   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+// };
+
+const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+  const domainFlag = domain ? `domain=${domain};` : '';
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
 };
+
 
 // Save user preferences
 const setUserPreferences = (preferences) => {
@@ -130,7 +138,8 @@ const setUserPreferences = (preferences) => {
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite
+    config.userPreferences.cookieSameSite,
+    '.cabinet-office.gov.uk'
   );
 };
 
