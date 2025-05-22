@@ -129,18 +129,43 @@ var config = {
 };
 
 // Set cookies with SameSite
-const setCookie = (name, value, days, secure, sameSite) => {
+// const setCookie = (name, value, days, secure, sameSite) => {
+//   const expires = new Date(Date.now() + days * 864e5).toUTCString();
+//   const secureFlag = secure ? 'Secure;' : '';
+//   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+// };
+
+const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
+  const domainPart = domain ? `domain=${domain}; ` : '';
+  document.cookie = `${name}=${value}; ${domainPart}expires=${expires}; path=/; ${secureFlag}SameSite=${sameSite}`;
 };
 
+
+
 // Save user preferences
+// const setUserPreferences = (preferences) => {
+
+//   const domain = location.hostname.endsWith('.cabinet-office.gov.uk')
+//     ? '.cabinet-office.gov.uk'
+//     : undefined;
+
+//   setCookie(
+//     config.userPreferences.cookieName,
+//     JSON.stringify(preferences),
+//     config.userPreferences.cookieExpiry,
+//     config.userPreferences.cookieSecure,
+//     config.userPreferences.cookieSameSite,
+//     domain
+//   );
+// };
+
 const setUserPreferences = (preferences) => {
 
-  const domain = location.hostname.endsWith('.cabinet-office.gov.uk')
+  const parentDomain = location.hostname.endsWith('.cabinet-office.gov.uk')
     ? '.cabinet-office.gov.uk'
-    : undefined;
+    : undefined; // Don't try to set domain on localhost
 
   setCookie(
     config.userPreferences.cookieName,
@@ -148,9 +173,11 @@ const setUserPreferences = (preferences) => {
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
     config.userPreferences.cookieSameSite,
-    domain
+    parentDomain
   );
+
 };
+
 
 // Handle form submitted
 const reloadCallback = function(eventData) {
