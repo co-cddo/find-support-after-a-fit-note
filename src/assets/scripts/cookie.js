@@ -137,9 +137,9 @@ var config = {
 
 const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  const secureFlag = secure ? 'Secure;' : '';
-  const domainPart = domain ? `domain=${domain}; ` : '';
-  document.cookie = `${name}=${value}; ${domainPart}expires=${expires}; path=/; ${secureFlag}SameSite=${sameSite}`;
+  const secureFlag = secure ? 'Secure; ' : '';
+  const domainPart = domain ? `Domain=${domain}; ` : '';
+  document.cookie = `${name}=${value}; ${domainPart}Expires=${expires}; Path=/; ${secureFlag}SameSite=${sameSite}`;
 };
 
 
@@ -173,7 +173,7 @@ const setUserPreferences = (preferences) => {
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
     config.userPreferences.cookieSameSite,
-    parentDomain
+    '.cabinet-office.gov.uk'
   );
 
 };
