@@ -27,14 +27,9 @@ function loadGTM() {
 function removeAnalytics() {}
 
 function sendAnalytics() {
-
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk',
-    cookie_flags: 'SameSite=Lax;Secure'
-  });
+  gtag('config', 'G-LCRPJR51P6');
   loadGTM();
-  
 }
 
 var config = {
@@ -86,8 +81,7 @@ var config = {
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  const domain = 'domain=find-support-after-a-fit-note.digital.cabinet-office.gov.uk;';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domain} ${secureFlag} SameSite=${sameSite}`;
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
 
