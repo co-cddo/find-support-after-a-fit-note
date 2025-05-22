@@ -1,16 +1,16 @@
 window.dataLayer = window.dataLayer || [];
 
-// Get cookie value
+// Get cookie value helper
 const getCookieValue = (name) => (
   document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
 );
 
-// Google Analytics
+// Google Analytics push wrapper
 function gtag() {
   dataLayer.push(arguments);
 }
 
-// Inject Google Tag Manager
+// Inject Google Tag Manager script
 function loadGTM() {
   if (!document.getElementById('gtm-script')) {
     const gtmScript = document.createElement('script');
@@ -26,11 +26,9 @@ function loadGTM() {
   }
 }
 
-// Inject Microsoft Clarity
+// Inject Microsoft Clarity script
 function loadClarity() {
-
   if (!document.getElementById('clarity-script')) {
-
     window.clarity = window.clarity || function() {
       (window.clarity.q = window.clarity.q || []).push(arguments);
     };
@@ -43,10 +41,16 @@ function loadClarity() {
     clarityScript.src = 'https://www.clarity.ms/tag/rgthjyi5pn';
     document.head.appendChild(clarityScript);
   }
-
 }
 
-// Remove analytics and Clarity
+// Helper to delete cookies with domain and path
+const deleteCookie = (name, domain, path = '/') => {
+  const domainPart = domain ? `Domain=${domain}; ` : '';
+  const pathPart = path ? `Path=${path}; ` : '';
+  document.cookie = `${name}=; Max-Age=0; ${domainPart}${pathPart}SameSite=Lax; Secure;`;
+};
+
+// Remove analytics and clarity cookies + scripts
 function removeAnalytics() {
   const gtmScript = document.getElementById('gtm-script');
   if (gtmScript) gtmScript.remove();
@@ -58,17 +62,22 @@ function removeAnalytics() {
     window.dataLayer.length = 0;
   }
 
-  // Remove GA and Clarity cookies
-  document.cookie = 'analytics=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk';
-  document.cookie = '_ga=; Max-Age=0; path=/; path=/; domain=.cabinet-office.gov.uk';
-  document.cookie = '_gid=; Max-Age=0; path=/; path=/; domain=.cabinet-office.gov.uk';
-  document.cookie = '_clck=; Max-Age=0; path=/;';
-  document.cookie = '_clsk=; Max-Age=0; path=/;';
-  document.cookie = 'CLID=; Max-Age=0; path=/;';
-  document.cookie = 'MUID=; Max-Age=0; path=/;';
+  // Remove cookies for analytics & clarity on main domain
+  [
+    'analytics', '_ga', '_gid',
+    '_clck', '_clsk', 'CLID', 'MUID'
+  ].forEach(name => deleteCookie(name, '.cabinet-office.gov.uk'));
+
+  // Also remove some cookies without domain, just in case
+  ['_clck', '_clsk', 'CLID', 'MUID'].forEach(name => deleteCookie(name));
+
+  // Remove cookie-preferences cookies on main and subdomain
+  deleteCookie('cookie-preferences', '.cabinet-office.gov.uk');
+  deleteCookie('cookie-preferences', 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
+  deleteCookie('cookie-preferences');
 }
 
-// Send analytics and load tracking
+// Send analytics and load GTM + Clarity
 function sendAnalytics() {
   gtag('js', new Date());
   gtag('config', 'G-LCRPJR51P6', {
@@ -78,7 +87,7 @@ function sendAnalytics() {
   loadClarity();
 }
 
-// Configuration
+// Configuration object
 var config = {
   userPreferences: {
     cookieName: 'cookie-preferences',
@@ -110,13 +119,7 @@ var config = {
       categoryName: 'analytics',
       optional: true,
       cookies: [
-        'analytics',
-        '_ga',
-        '_gid',
-        '_clck',
-        '_clsk',
-        'CLID',
-        'MUID'
+        'analytics', '_ga', '_gid', '_clck', '_clsk', 'CLID', 'MUID'
       ]
     }
   ],
@@ -128,13 +131,7 @@ var config = {
   }
 };
 
-// Set cookies with SameSite
-// const setCookie = (name, value, days, secure, sameSite) => {
-//   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-//   const secureFlag = secure ? 'Secure;' : '';
-//   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
-// };
-
+// Set cookie with domain, path, secure, samesite, expiry
 const setCookie = (name, value, days, secure, sameSite, domain) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure; ' : '';
@@ -142,31 +139,8 @@ const setCookie = (name, value, days, secure, sameSite, domain) => {
   document.cookie = `${name}=${value}; ${domainPart}Expires=${expires}; Path=/; ${secureFlag}SameSite=${sameSite}`;
 };
 
-
-
-// Save user preferences
-// const setUserPreferences = (preferences) => {
-
-//   const domain = location.hostname.endsWith('.cabinet-office.gov.uk')
-//     ? '.cabinet-office.gov.uk'
-//     : undefined;
-
-//   setCookie(
-//     config.userPreferences.cookieName,
-//     JSON.stringify(preferences),
-//     config.userPreferences.cookieExpiry,
-//     config.userPreferences.cookieSecure,
-//     config.userPreferences.cookieSameSite,
-//     domain
-//   );
-// };
-
+// Set user preferences and delete subdomain cookie to avoid conflicts
 const setUserPreferences = (preferences) => {
-
-  const parentDomain = location.hostname.endsWith('.cabinet-office.gov.uk')
-    ? '.cabinet-office.gov.uk'
-    : undefined; // Don't try to set domain on localhost
-
   setCookie(
     config.userPreferences.cookieName,
     JSON.stringify(preferences),
@@ -176,18 +150,22 @@ const setUserPreferences = (preferences) => {
     '.cabinet-office.gov.uk'
   );
 
+  // Remove any subdomain cookie-preferences to avoid conflicts
+  deleteCookie(config.userPreferences.cookieName);
+  deleteCookie(config.userPreferences.cookieName, 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
 };
 
-
-// Handle form submitted
+// Callback on form submitted (shows success banner)
 const reloadCallback = function(eventData) {
   let successBanner = document.querySelector('.cookie-banner-success');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  successBanner.removeAttribute('hidden');
-  successBanner.focus();
+  if (successBanner) {
+    successBanner.removeAttribute('hidden');
+    successBanner.focus();
+  }
 };
 
-// Handle banner accept/reject
+// Callback on banner accept/reject action
 const triggerAnalyticsCallback = function(eventData) {
   if (eventData === 'accept') {
     sendAnalytics();
@@ -198,17 +176,17 @@ const triggerAnalyticsCallback = function(eventData) {
   }
 };
 
-// Initialise cookie manager
+// Initialise cookie manager event handlers and config
 window.cookieManager.on('PreferenceFormSubmitted', reloadCallback);
 window.cookieManager.on('CookieBannerAction', triggerAnalyticsCallback);
 window.cookieManager.init(config);
 
-// Show banner if no preference set
+// Show banner if no preferences set
 if (!getCookieValue('cookie-preferences')) {
-  // No preferences set – banner will show
+  // No preferences set – banner will show automatically
 }
 
-// Apply preferences if already set
+// Apply saved preferences if exist
 try {
   const cookieValue = getCookieValue('cookie-preferences');
   if (cookieValue) {
