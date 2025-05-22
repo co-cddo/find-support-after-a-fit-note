@@ -15,8 +15,13 @@ function gtag() {
 
 // Inject Google Tag Manager
 function loadGTM() {
+
+  console.log('Add Google Analytics');
+
   if (!document.getElementById('gtm-script')) {
+
     const gtmScript = document.createElement('script');
+
     gtmScript.id = 'gtm-script';
     gtmScript.async = true;
     gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89';
@@ -26,28 +31,25 @@ function loadGTM() {
       'gtm.start': new Date().getTime(),
       event: 'gtm.js'
     });
+
   }
+
 }
 
 
 // Inject Microsoft Clarity
 function loadClarity() {
-  
+
+  console.log('Add Microsoft Clarity');
+
   if (!document.getElementById('clarity-script')) {
-
-    window.clarity = window.clarity || function () {
-      (window.clarity.q = window.clarity.q || []).push(arguments);
-    };
-
-    const clarityScript = document.createElement('script');
-
-    clarityScript.id = 'clarity-script';
-    clarityScript.type = 'text/javascript';
-    clarityScript.async = true;
-    clarityScript.src = 'https://www.clarity.ms/tag/rgthjyi5pn';
-
-    document.head.appendChild(clarityScript);
-
+    (function(c,l,a,r,i,t,y){
+      c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
+      t = l.createElement(r); t.async = 1; t.id = 'clarity-script';
+      t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t,y);
+    })(window, document, 'clarity', 'script', 'rgthjyi5pn');
   }
 
 }
@@ -71,6 +73,10 @@ function removeAnalytics() {
 
 // Send analytics and load tracking
 function sendAnalytics() {
+
+  // Debugging
+  console.log('Add Tracking Code');
+
   gtag('js', new Date());
   gtag('config', 'G-LCRPJR51P6');
   loadGTM();
@@ -112,7 +118,11 @@ var config = {
       cookies: [
         'analytics',
         '_ga',
-        '_gid'
+        '_gid',
+        '_clck',
+        '_clsk',
+        'CLID',
+        'MUID'
       ]
     }
   ],
