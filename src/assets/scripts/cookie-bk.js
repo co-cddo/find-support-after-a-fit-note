@@ -1,3 +1,5 @@
+
+
 window.dataLayer = window.dataLayer || [];
 
 
@@ -6,10 +8,48 @@ const getCookieValue = (name) => (
 );
 
 
-function gtag() {}
-function loadGTM() {}
-function removeAnalytics() {}
-function sendAnalytics() {}
+function gtag() {
+  dataLayer.push(arguments);
+}
+
+
+function loadGTM() {
+  if (!document.getElementById('gtm-script')) {
+    const gtmScript = document.createElement('script');
+    gtmScript.id = 'gtm-script';
+    gtmScript.async = true;
+    gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89';
+    document.head.appendChild(gtmScript);
+    window.dataLayer.push({
+      'gtm.start': new Date().getTime(),
+      event: 'gtm.js'
+    });
+  }
+}
+
+function removeAnalytics() {
+
+  // const gtmScript = document.getElementById('gtm-script');
+  
+  // if (gtmScript) gtmScript.remove();
+
+  // if (window.dataLayer) {
+  //   window.dataLayer.length = 0; 
+  // }
+
+  // document.cookie = 'analytics=; Max-Age=0; path=/;';
+  // document.cookie = '_ga=; Max-Age=0; path=/;';
+  // document.cookie = '_gid=; Max-Age=0; path=/;';
+
+}
+
+function sendAnalytics() {
+
+  // gtag('js', new Date());
+  // gtag('config', 'G-LCRPJR51P6');
+  // loadGTM();
+
+}
 
 var config = {
   userPreferences: {
@@ -17,7 +57,6 @@ var config = {
     cookieExpiry: 365,
     cookieSecure: location.protocol === 'https:',
     cookieSameSite: 'Lax',
-    cookieDomain: 'cabinet-office.gov.uk' // Specific domain added
   },
   preferencesForm: {
     class: 'cookie-preferences-form'
@@ -57,14 +96,11 @@ var config = {
   }
 };
 
-
-const setCookie = (name, value, days, secure, sameSite, domain) => {
+const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  const domainFlag = domain ? `Domain=${domain};` : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag}${secureFlag} SameSite=${sameSite}`;
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
-
 
 const setUserPreferences = (preferences) => {
 
@@ -73,8 +109,7 @@ const setUserPreferences = (preferences) => {
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite,
-    config.userPreferences.cookieDomain // Specific domain added
+    config.userPreferences.cookieSameSite
   );
 
 };
@@ -90,8 +125,10 @@ const reloadCallback = function(eventData) {
 const triggerAnalyticsCallback = function(eventData) {
   
   if (eventData === 'accept') {
+    // sendAnalytics();
     setUserPreferences({ analytics: 'on' });
   } else if (eventData === 'reject') {
+    // removeAnalytics();
     setUserPreferences({ analytics: 'off' });
   }
 
