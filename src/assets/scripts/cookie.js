@@ -16,8 +16,7 @@ var config = {
     cookieName: 'cookie-preferences',
     cookieExpiry: 365,
     cookieSecure: location.protocol === 'https:',
-    cookieSameSite: 'Lax',
-    cookieDomain: 'cabinet-office.gov.uk' // Specific domain added
+    cookieSameSite: 'Lax'
   },
   preferencesForm: {
     class: 'cookie-preferences-form'
@@ -58,11 +57,10 @@ var config = {
 };
 
 
-const setCookie = (name, value, days, secure, sameSite, domain) => {
+const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  const domainFlag = domain ? `Domain=${domain};` : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag}${secureFlag} SameSite=${sameSite}`;
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
 
@@ -73,8 +71,7 @@ const setUserPreferences = (preferences) => {
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite,
-    config.userPreferences.cookieDomain // Specific domain added
+    config.userPreferences.cookieSameSite
   );
 
 };
