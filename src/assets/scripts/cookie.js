@@ -52,18 +52,18 @@ function removeAnalytics() {
   // const clarityScript = document.getElementById('clarity-script');
   // if (clarityScript) clarityScript.remove();
 
-  if (window.dataLayer) {
-    window.dataLayer.length = 0;
-  }
+  // if (window.dataLayer) {
+  //   window.dataLayer.length = 0;
+  // }
 
   // Remove GA and Clarity cookies
-  document.cookie = 'analytics=; Max-Age=0; path=/;';
-
+  // document.cookie = 'analytics=; Max-Age=0; path=/;';
   // document.cookie = '_ga=; Max-Age=0; path=/;';
   // document.cookie = '_gid=; Max-Age=0; path=/;';
+  // document.cookie = '_ga=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
+  // document.cookie = '_gid=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
 
-  document.cookie = '_ga=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
-  document.cookie = '_gid=; Max-Age=0; path=/; domain=.cabinet-office.gov.uk;';
+  alert('Remove Analytics');
 
 }
 
