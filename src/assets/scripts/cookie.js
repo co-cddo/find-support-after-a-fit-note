@@ -65,7 +65,9 @@ function removeAnalytics() {
 // Send analytics and load tracking
 function sendAnalytics() {
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6');
+  gtag('config', 'G-LCRPJR51P6', {
+    cookie_domain: '.find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
+  });
   // loadGTM();
   // loadClarity();
 }
@@ -117,17 +119,10 @@ var config = {
 };
 
 // Set cookies with SameSite
-// const setCookie = (name, value, days, secure, sameSite) => {
-//   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-//   const secureFlag = secure ? 'Secure;' : '';
-//   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
-// };
-
-const setCookie = (name, value, days, secure, sameSite, domain) => {
+const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
-  const domainFlag = domain ? `domain=${domain};` : '';
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${domainFlag} ${secureFlag} SameSite=${sameSite}`;
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
 
 
@@ -138,8 +133,7 @@ const setUserPreferences = (preferences) => {
     JSON.stringify(preferences),
     config.userPreferences.cookieExpiry,
     config.userPreferences.cookieSecure,
-    config.userPreferences.cookieSameSite,
-    '.cabinet-office.gov.uk'
+    config.userPreferences.cookieSameSite
   );
 };
 
