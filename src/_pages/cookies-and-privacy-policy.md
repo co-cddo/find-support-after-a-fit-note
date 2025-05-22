@@ -35,12 +35,14 @@ This helps us understand what’s working well and what we could improve. Google
 
 **Analytics cookies we use:**
 
-| Name | Purpose                                                                                | Expires  |
-|------|----------------------------------------------------------------------------------------|----------|
-| _ga  | Helps us count how many people visit this website by tracking if you’ve visited before | 2 years  |
-| _gid | Tracks an individual session on your device to understand user journeys                | 24 hours |
-| CLID | This checks if you have used MS Clarity before                                         | 1 year   |
-| MUID | This helps with things like advertising and site analytics                             | 2 years  |
+| Name | Purpose                                                                                | Expires                      |
+|-------|----------------------------------------------------------------------------------------|-----------------------------|
+| _ga   | Helps us count how many people visit this website by tracking if you’ve visited before | 2 years                     |
+| _gid  | Tracks an individual session on your device to understand user journeys                | 24 hours                    |
+| _clck | This helps check if you have visited the site before                                   | 1 year                      |
+| _clsk | This helps understand how you use the site                                             | When you close your browser |
+| CLID  | This checks if you have used MS Clarity before                                         | 1 year                      |
+| MUID  | This helps with things like advertising and site analytics                             | 2 years                     |
 
 ## Managing your cookie preferences
 
