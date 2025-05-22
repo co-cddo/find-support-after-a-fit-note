@@ -115,7 +115,7 @@
   {# Cookies in production #}
   {% if (meta.siteEnvironment === "production") %}
     <script src="{{ '/assets/scripts/cookie-manager.js' | url }}"></script>
-    <script src="{{ '/assets/scripts/cookie.js' | url }}"></script>
+    <script src="{{ '/assets/scripts/cookie.js?id=1' | url }}"></script>
   {% endif %}
   
   {% block bodyEnd %}{% endblock %}
