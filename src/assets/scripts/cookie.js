@@ -199,19 +199,11 @@ const reloadCallback = function(eventData) {
   successBanner.removeAttribute('hidden');
   successBanner.focus();  
 
-  // Read updated preferences and apply analytics settings
-  try {
-    const cookieValue = getCookieValue('cookie-preferences');
-    if (cookieValue) {
-      const parsed = JSON.parse(cookieValue);
-      if (parsed.analytics === 'on') {
-        sendAnalytics();
-      } else {
-        removeAnalytics();
-      }
-    }
-  } catch (err) {
-    console.error('Error reading updated preferences:', err);
+  // Apply preferences directly from event
+  if (preferences.analytics === 'on') {
+    sendAnalytics();
+  } else {
+    removeAnalytics();
   }
 
 };
