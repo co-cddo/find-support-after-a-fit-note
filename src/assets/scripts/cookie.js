@@ -199,12 +199,22 @@ const reloadCallback = function(eventData) {
   successBanner.removeAttribute('hidden');
   successBanner.focus();  
 
-  // Apply preferences directly from event
-  if (preferences.analytics === 'on') {
-    sendAnalytics();
-  } else {
-    removeAnalytics();
-  }
+  // Delay applying analytics changes until cookie is updated
+  setTimeout(() => {
+    try {
+      const cookieValue = getCookieValue('cookie-preferences');
+      if (cookieValue) {
+        const parsed = JSON.parse(cookieValue);
+        if (parsed.analytics === 'on') {
+          sendAnalytics();
+        } else {
+          removeAnalytics();
+        }
+      }
+    } catch (err) {
+      console.error('Error parsing cookie preferences:', err);
+    }
+  }, 200); // 200ms delay should be enough for the cookie to update
 
 };
 
