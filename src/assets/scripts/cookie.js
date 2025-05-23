@@ -76,22 +76,34 @@ function loadClarity() {
 // }
 
 function deleteCookieAcrossDomains(name) {
-  const domains = [
-    window.location.hostname,        // current domain
-    '.' + window.location.hostname,  // current domain with leading dot
-    '.cabinet-office.gov.uk',        // parent domain (hardcoded)
-    'cabinet-office.gov.uk'          // parent domain without leading dot
-  ];
+  const hostname = window.location.hostname;
+  const domainParts = hostname.split('.');
 
-  const paths = ['/', '/path', '']; // try root and potential subpaths
+  const domainsToTry = domainParts.length >= 2
+    ? [
+        hostname,                                 // full subdomain
+        '.' + hostname,                           // with leading dot
+        '.' + domainParts.slice(-2).join('.'),    // base domain
+        domainParts.slice(-2).join('.')           // base domain without dot
+      ]
+    : [hostname];
 
-  domains.forEach(domain => {
-    paths.forEach(path => {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}; Secure; SameSite=Lax`;
+  const pathsToTry = ['/', ''];
+
+  domainsToTry.forEach(domain => {
+    pathsToTry.forEach(path => {
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain};`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}; Secure; SameSite=Lax`;
     });
   });
+
+  // Also attempt with no domain at all (defaults to current domain)
+  pathsToTry.forEach(path => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path};`;
+  });
+
 }
+
 
 
 
@@ -120,6 +132,13 @@ function removeAnalytics() {
     'MUID',
     'analytics'
   ];
+
+  console.log('Removing analytics cookies...');
+  
+  cookieNames.forEach(name => {
+    console.log('Deleting cookie:', name);
+    deleteCookieAcrossDomains(name);
+  });
 
   cookieNames.forEach(deleteCookieAcrossDomains);
 }
