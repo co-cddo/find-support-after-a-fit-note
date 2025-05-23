@@ -16,8 +16,6 @@ function gtag() {
 // Inject Google Tag Manager
 function loadGTM() {
 
-  console.log('Add Google Analytics');
-
   if (!document.getElementById('gtm-script')) {
 
     const gtmScript = document.createElement('script');
@@ -40,8 +38,6 @@ function loadGTM() {
 // Inject Microsoft Clarity
 function loadClarity() {
 
-  console.log('Add Microsoft Clarity');
-
   if (!document.getElementById('clarity-script')) {
     (function(c,l,a,r,i,t,y){
       c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
@@ -55,7 +51,32 @@ function loadClarity() {
 }
 
 
-// Remove Analytics and Clarity
+// Delete cookies across domains
+function deleteCookieAcrossDomains(name) {
+
+  const baseDomains = [
+    window.location.hostname,
+    '.' + window.location.hostname
+  ];
+
+  const domainParts = window.location.hostname.split('.');
+
+  // Try deleting from all parent domain levels
+  for (let i = 0; i <= domainParts.length - 2; i++) {
+    const domain = '.' + domainParts.slice(i).join('.');
+    if (!baseDomains.includes(domain)) {
+      baseDomains.push(domain);
+    }
+  }
+
+  baseDomains.forEach(domain => {
+    document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain};`;
+  });
+
+}
+
+
+// Remove Google Tag Manager and Microsoft Clarity
 function removeAnalytics() {
 
   const gtmScript = document.getElementById('gtm-script');
@@ -68,17 +89,29 @@ function removeAnalytics() {
     window.dataLayer.length = 0;
   }
 
+  // Clean up all analytics cookies at all domain levels
+  const cookieNames = [
+    '_ga',
+    '_gid',
+    '_gat',
+    '_ga_' + 'G-LCRPJR51P6', // GA4 measurement ID
+    '_clck',
+    '_clsk',
+    'CLID',
+    'MUID',
+    'analytics'
+  ];
+
+  cookieNames.forEach(deleteCookieAcrossDomains);
 }
 
 
 // Send analytics and load tracking
 function sendAnalytics() {
-
-  // Debugging
-  console.log('Add Tracking Code');
-
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6');
+  gtag('config', 'G-LCRPJR51P6', {
+    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk' // Helps contain the cookie scope to the subdomain
+  });
   loadGTM();
   loadClarity();
 }
