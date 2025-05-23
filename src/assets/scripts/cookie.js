@@ -35,123 +35,34 @@ function loadGTM() {
 }
 
 
-// Inject Microsoft Clarity
-function loadClarity() {
-
-  if (!document.getElementById('clarity-script')) {
-    (function(c,l,a,r,i,t,y){
-      c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments) };
-      t = l.createElement(r); t.async = 1; t.id = 'clarity-script';
-      t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0];
-      y.parentNode.insertBefore(t,y);
-    })(window, document, 'clarity', 'script', 'rgthjyi5pn');
-  }
-
-}
-
-
-// Delete cookies across domains
-// function deleteCookieAcrossDomains(name) {
-
-//   const baseDomains = [
-//     window.location.hostname,
-//     '.' + window.location.hostname
-//   ];
-
-//   const domainParts = window.location.hostname.split('.');
-
-//   // Try deleting from all parent domain levels
-//   for (let i = 0; i <= domainParts.length - 2; i++) {
-//     const domain = '.' + domainParts.slice(i).join('.');
-//     if (!baseDomains.includes(domain)) {
-//       baseDomains.push(domain);
-//     }
-//   }
-
-//   baseDomains.forEach(domain => {
-//     document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain};`;
-//   });
-
-// }
-
-function deleteCookieAcrossDomains(name) {
-  const hostname = window.location.hostname;
-  const domainParts = hostname.split('.');
-
-  const domainsToTry = domainParts.length >= 2
-    ? [
-        hostname,                                 // full subdomain
-        '.' + hostname,                           // with leading dot
-        '.' + domainParts.slice(-2).join('.'),    // base domain
-        domainParts.slice(-2).join('.')           // base domain without dot
-      ]
-    : [hostname];
-
-  const pathsToTry = ['/', ''];
-
-  domainsToTry.forEach(domain => {
-    pathsToTry.forEach(path => {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain};`;
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}; Secure; SameSite=Lax`;
-    });
-  });
-
-  // Also attempt with no domain at all (defaults to current domain)
-  pathsToTry.forEach(path => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path};`;
-  });
-
-}
-
-
-
-
-// Remove Google Tag Manager and Microsoft Clarity
+// Remove Google Tag Manager
 function removeAnalytics() {
 
   const gtmScript = document.getElementById('gtm-script');
+  
   if (gtmScript) gtmScript.remove();
-
-  const clarityScript = document.getElementById('clarity-script');
-  if (clarityScript) clarityScript.remove();
 
   if (window.dataLayer) {
     window.dataLayer.length = 0;
   }
 
-  // Clean up all analytics cookies at all domain levels
-  const cookieNames = [
-    '_ga',
-    '_gid',
-    '_gat',
-    '_ga_LCRPJR51P6',
-    '_clck',
-    '_clsk',
-    'CLID',
-    'MUID',
-    'analytics'
-  ];
+  // Optionally remove cookies that were set for GA, GTM or Clarity
+  document.cookie = '_ga=; Max-Age=0; path=/;';
+  document.cookie = '_gid=; Max-Age=0; path=/;';
+  document.cookie = '_clck=; Max-Age=0; path=/;';
+  document.cookie = '_clsk=; Max-Age=0; path=/;';
+  document.cookie = 'analytics=; Max-Age=0; path=/;';
+  document.cookie = 'MUID=; Max-Age=0; path=/;';
+  document.cookie = 'CLID=; Max-Age=0; path=/;';
 
-  console.log('Removing analytics cookies...');
-  
-  cookieNames.forEach(name => {
-    console.log('Deleting cookie:', name);
-    deleteCookieAcrossDomains(name);
-  });
-
-  cookieNames.forEach(deleteCookieAcrossDomains);
 }
 
 
 // Send analytics and load tracking
 function sendAnalytics() {
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk' // Helps contain the cookie scope to the subdomain
-  });
+  gtag('config', 'G-LCRPJR51P6');
   loadGTM();
-  loadClarity();
 }
 
 
@@ -227,37 +138,15 @@ const setUserPreferences = (preferences) => {
 
 
 // Handle form submitted
-const reloadCallback = function(eventData) {
-
-  console.log('PreferenceFormSubmitted fired:', eventData);
-  
+const reloadCallback = function() {
   let successBanner = document.querySelector('.cookie-banner-success');
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
   successBanner.removeAttribute('hidden');
-  successBanner.focus();  
-
-  // Delay applying analytics changes until cookie is updated
-  setTimeout(() => {
-    try {
-      const cookieValue = getCookieValue('cookie-preferences');
-      if (cookieValue) {
-        const parsed = JSON.parse(cookieValue);
-        if (parsed.analytics === 'on') {
-          sendAnalytics();
-        } else {
-          removeAnalytics();
-        }
-      }
-    } catch (err) {
-      console.error('Error parsing cookie preferences:', err);
-    }
-  }, 200); // 200ms delay should be enough for the cookie to update
-
+  successBanner.focus();
 };
 
 
-// Handle banner accept/reject
+// Handle banner action callback
 const triggerAnalyticsCallback = function(eventData) {
   if (eventData === 'accept') {
     setUserPreferences({ analytics: 'on' });
