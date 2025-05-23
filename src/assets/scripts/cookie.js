@@ -94,7 +94,7 @@ function removeAnalytics() {
     '_ga',
     '_gid',
     '_gat',
-    '_ga_' + 'G-LCRPJR51P6', // GA4 measurement ID
+    '_ga_' + 'LCRPJR51P6', // GA4 measurement ID
     '_clck',
     '_clsk',
     'CLID',
@@ -194,6 +194,7 @@ const reloadCallback = function(eventData) {
   console.log('PreferenceFormSubmitted fired:', eventData);
   
   let successBanner = document.querySelector('.cookie-banner-success');
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
   successBanner.removeAttribute('hidden');
   successBanner.focus();  
