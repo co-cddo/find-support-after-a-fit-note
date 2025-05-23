@@ -1,19 +1,25 @@
 window.dataLayer = window.dataLayer || [];
 
+
 // Get cookie value
 const getCookieValue = (name) => (
   document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
 );
+
 
 // Google Analytics
 function gtag() {
   dataLayer.push(arguments);
 }
 
+
 // Inject Google Tag Manager
 function loadGTM() {
+
   if (!document.getElementById('gtm-script')) {
+
     const gtmScript = document.createElement('script');
+
     gtmScript.id = 'gtm-script';
     gtmScript.async = true;
     gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89';
@@ -23,55 +29,42 @@ function loadGTM() {
       'gtm.start': new Date().getTime(),
       event: 'gtm.js'
     });
+
   }
+
 }
 
-// Inject Microsoft Clarity
-function loadClarity() {
-  if (!document.getElementById('clarity-script')) {
-    window.clarity = window.clarity || function() {
-      (window.clarity.q = window.clarity.q || []).push(arguments);
-    };
-    clarity('set', 'cookieDomain', 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk');
 
-    const clarityScript = document.createElement('script');
-    clarityScript.id = 'clarity-script';
-    clarityScript.type = 'text/javascript';
-    clarityScript.async = true;
-    clarityScript.src = 'https://www.clarity.ms/tag/rgthjyi5pn';
-    document.head.appendChild(clarityScript);
-  }
-}
-
-// Remove analytics and Clarity
+// Remove Google Tag Manager
 function removeAnalytics() {
-  const gtmScript = document.getElementById('gtm-script');
-  if (gtmScript) gtmScript.remove();
 
-  const clarityScript = document.getElementById('clarity-script');
-  if (clarityScript) clarityScript.remove();
+  const gtmScript = document.getElementById('gtm-script');
+  
+  if (gtmScript) gtmScript.remove();
 
   if (window.dataLayer) {
     window.dataLayer.length = 0;
   }
 
-  // Remove GA and Clarity cookies
+  // Optionally remove cookies that were set for GA, GTM or Clarity
   document.cookie = '_ga=; Max-Age=0; path=/;';
   document.cookie = '_gid=; Max-Age=0; path=/;';
-  document.cookie = 'analytics=; Max-Age=0; path=/;';
   document.cookie = '_clck=; Max-Age=0; path=/;';
   document.cookie = '_clsk=; Max-Age=0; path=/;';
+  document.cookie = 'analytics=; Max-Age=0; path=/;';
+  document.cookie = 'MUID=; Max-Age=0; path=/;';
+  document.cookie = 'CLID=; Max-Age=0; path=/;';
+
 }
+
 
 // Send analytics and load tracking
 function sendAnalytics() {
   gtag('js', new Date());
-  gtag('config', 'G-LCRPJR51P6', {
-    cookie_domain: 'find-support-after-a-fit-note.digital.cabinet-office.gov.uk'
-  });
+  gtag('config', 'G-LCRPJR51P6');
   loadGTM();
-  loadClarity();
 }
+
 
 // Configuration
 var config = {
@@ -109,7 +102,9 @@ var config = {
         '_ga',
         '_gid',
         '_clck',
-        '_clsk'
+        '_clsk',
+        'CLID',
+        'MUID'
       ]
     }
   ],
@@ -121,12 +116,14 @@ var config = {
   }
 };
 
+
 // Set cookies with SameSite
 const setCookie = (name, value, days, secure, sameSite) => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   const secureFlag = secure ? 'Secure;' : '';
   document.cookie = `${name}=${value}; expires=${expires}; path=/; ${secureFlag} SameSite=${sameSite}`;
 };
+
 
 // Save user preferences
 const setUserPreferences = (preferences) => {
@@ -139,36 +136,35 @@ const setUserPreferences = (preferences) => {
   );
 };
 
+
 // Handle form submitted
-const reloadCallback = function(eventData) {
+const reloadCallback = function() {
   let successBanner = document.querySelector('.cookie-banner-success');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   successBanner.removeAttribute('hidden');
   successBanner.focus();
 };
 
-// Handle banner accept/reject
+
+// Handle banner action callback
 const triggerAnalyticsCallback = function(eventData) {
   if (eventData === 'accept') {
-    sendAnalytics();
     setUserPreferences({ analytics: 'on' });
+    sendAnalytics();
   } else if (eventData === 'reject') {
-    removeAnalytics();
     setUserPreferences({ analytics: 'off' });
+    removeAnalytics();
   }
 };
+
 
 // Initialise cookie manager
 window.cookieManager.on('PreferenceFormSubmitted', reloadCallback);
 window.cookieManager.on('CookieBannerAction', triggerAnalyticsCallback);
 window.cookieManager.init(config);
 
-// Show banner if no preference set
-if (!getCookieValue('cookie-preferences')) {
-  // No preferences set – banner will show
-}
 
-// Apply preferences if already set
+// Apply preferences, if already set
 try {
   const cookieValue = getCookieValue('cookie-preferences');
   if (cookieValue) {
