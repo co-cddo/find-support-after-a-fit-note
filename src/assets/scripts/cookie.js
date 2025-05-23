@@ -94,7 +94,7 @@ function removeAnalytics() {
     '_ga',
     '_gid',
     '_gat',
-    '_ga_' + 'LCRPJR51P6', // GA4 measurement ID
+    '_ga_LCRPJR51P6',
     '_clck',
     '_clsk',
     'CLID',
