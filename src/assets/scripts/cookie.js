@@ -190,10 +190,29 @@ const setUserPreferences = (preferences) => {
 
 // Handle form submitted
 const reloadCallback = function(eventData) {
+
+  console.log('PreferenceFormSubmitted fired:', eventData);
+  
   let successBanner = document.querySelector('.cookie-banner-success');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   successBanner.removeAttribute('hidden');
   successBanner.focus();  
+
+  // Read updated preferences and apply analytics settings
+  try {
+    const cookieValue = getCookieValue('cookie-preferences');
+    if (cookieValue) {
+      const parsed = JSON.parse(cookieValue);
+      if (parsed.analytics === 'on') {
+        sendAnalytics();
+      } else {
+        removeAnalytics();
+      }
+    }
+  } catch (err) {
+    console.error('Error reading updated preferences:', err);
+  }
+
 };
 
 
