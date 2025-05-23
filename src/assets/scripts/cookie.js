@@ -52,28 +52,47 @@ function loadClarity() {
 
 
 // Delete cookies across domains
-function deleteCookieAcrossDomains(name) {
+// function deleteCookieAcrossDomains(name) {
 
-  const baseDomains = [
-    window.location.hostname,
-    '.' + window.location.hostname
+//   const baseDomains = [
+//     window.location.hostname,
+//     '.' + window.location.hostname
+//   ];
+
+//   const domainParts = window.location.hostname.split('.');
+
+//   // Try deleting from all parent domain levels
+//   for (let i = 0; i <= domainParts.length - 2; i++) {
+//     const domain = '.' + domainParts.slice(i).join('.');
+//     if (!baseDomains.includes(domain)) {
+//       baseDomains.push(domain);
+//     }
+//   }
+
+//   baseDomains.forEach(domain => {
+//     document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain};`;
+//   });
+
+// }
+
+function deleteCookieAcrossDomains(name) {
+  const domains = [
+    window.location.hostname,        // current domain
+    '.' + window.location.hostname,  // current domain with leading dot
+    '.cabinet-office.gov.uk',        // parent domain (hardcoded)
+    'cabinet-office.gov.uk'          // parent domain without leading dot
   ];
 
-  const domainParts = window.location.hostname.split('.');
+  const paths = ['/', '/path', '']; // try root and potential subpaths
 
-  // Try deleting from all parent domain levels
-  for (let i = 0; i <= domainParts.length - 2; i++) {
-    const domain = '.' + domainParts.slice(i).join('.');
-    if (!baseDomains.includes(domain)) {
-      baseDomains.push(domain);
-    }
-  }
-
-  baseDomains.forEach(domain => {
-    document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain};`;
+  domains.forEach(domain => {
+    paths.forEach(path => {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}; Secure; SameSite=Lax`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain};`;
+    });
   });
-
 }
+
 
 
 // Remove Google Tag Manager and Microsoft Clarity
