@@ -76,17 +76,18 @@ function sendAnalytics() {
 
   gtag('js', new Date());
 
-  // First, configure GA
-  gtag('config', 'G-LCRPJR51P6');
-
-  // Send the user_type to GA4 as a user property
+  // Send the user_type to GA4 as a user property FIRST
   const storedUserType = localStorage.getItem('userType') || 'external';
   gtag('set', { user_properties: { user_type: storedUserType } });
+
+  // Then configure GA
+  gtag('config', 'G-LCRPJR51P6');
 
   // Load GTM last
   loadGTM();
 
 }
+
 
 
 // Configuration
