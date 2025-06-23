@@ -1,6 +1,27 @@
 window.dataLayer = window.dataLayer || [];
 
 
+// Track internal/external users
+(function () {
+∂
+  if (typeof window === 'undefined') return;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const isInternal = urlParams.get('internal')?.toLowerCase() === 'true';
+
+  if (isInternal) {
+    localStorage.setItem('userType', 'internal');
+  }
+
+  const storedUserType = localStorage.getItem('userType') || 'external';
+
+  window.dataLayer.push({
+    user_type: storedUserType
+  });
+
+})();
+
+
 // Get cookie value
 const getCookieValue = (name) => (
   document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
@@ -15,11 +36,8 @@ function gtag() {
 
 // Inject Google Tag Manager
 function loadGTM() {
-
   if (!document.getElementById('gtm-script')) {
-
     const gtmScript = document.createElement('script');
-
     gtmScript.id = 'gtm-script';
     gtmScript.async = true;
     gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MV2BWF89';
@@ -29,9 +47,7 @@ function loadGTM() {
       'gtm.start': new Date().getTime(),
       event: 'gtm.js'
     });
-
   }
-
 }
 
 
@@ -39,7 +55,7 @@ function loadGTM() {
 function removeAnalytics() {
 
   const gtmScript = document.getElementById('gtm-script');
-  
+
   if (gtmScript) gtmScript.remove();
 
   if (window.dataLayer) {
@@ -47,13 +63,10 @@ function removeAnalytics() {
   }
 
   // Optionally remove cookies that were set for GA, GTM or Clarity
-  document.cookie = '_ga=; Max-Age=0; path=/;';
-  document.cookie = '_gid=; Max-Age=0; path=/;';
-  document.cookie = '_clck=; Max-Age=0; path=/;';
-  document.cookie = '_clsk=; Max-Age=0; path=/;';
-  document.cookie = 'analytics=; Max-Age=0; path=/;';
-  document.cookie = 'MUID=; Max-Age=0; path=/;';
-  document.cookie = 'CLID=; Max-Age=0; path=/;';
+  const cookieNames = ['_ga', '_gid', '_clck', '_clsk', 'analytics', 'MUID', 'CLID'];
+  cookieNames.forEach(name => {
+    document.cookie = `${name}=; Max-Age=0; path=/;`;
+  });
 
 }
 
@@ -138,7 +151,7 @@ const setUserPreferences = (preferences) => {
 
 
 // Handle form submitted
-const reloadCallback = function() {
+const reloadCallback = function () {
   let successBanner = document.querySelector('.cookie-banner-success');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   successBanner.removeAttribute('hidden');
@@ -147,7 +160,7 @@ const reloadCallback = function() {
 
 
 // Handle banner action callback
-const triggerAnalyticsCallback = function(eventData) {
+const triggerAnalyticsCallback = function (eventData) {
   if (eventData === 'accept') {
     setUserPreferences({ analytics: 'on' });
     sendAnalytics();
@@ -157,12 +170,10 @@ const triggerAnalyticsCallback = function(eventData) {
   }
 };
 
-
 // Initialise cookie manager
 window.cookieManager.on('PreferenceFormSubmitted', reloadCallback);
 window.cookieManager.on('CookieBannerAction', triggerAnalyticsCallback);
 window.cookieManager.init(config);
-
 
 // Apply preferences, if already set
 try {
