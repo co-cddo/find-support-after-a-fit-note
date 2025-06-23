@@ -3,7 +3,7 @@ window.dataLayer = window.dataLayer || [];
 
 // Track internal/external users
 (function () {
-∂
+
   if (typeof window === 'undefined') return;
 
   const urlParams = new URLSearchParams(window.location.search);
