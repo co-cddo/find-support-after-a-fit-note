@@ -73,9 +73,19 @@ function removeAnalytics() {
 
 // Send analytics and load tracking
 function sendAnalytics() {
+
   gtag('js', new Date());
+
+  // First, configure GA
   gtag('config', 'G-LCRPJR51P6');
+
+  // Send the user_type to GA4 as a user property
+  const storedUserType = localStorage.getItem('userType') || 'external';
+  gtag('set', { user_properties: { user_type: storedUserType } });
+
+  // Load GTM last
   loadGTM();
+
 }
 
 
