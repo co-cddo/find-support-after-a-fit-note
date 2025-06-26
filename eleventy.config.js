@@ -29,9 +29,9 @@ module.exports = async function (eleventyConfig) {
 
   // Passthrough assets
   eleventyConfig.addPassthroughCopy({
-    "node_modules/govuk-frontend/dist/govuk/assets/images/": "assets/images",
+    "node_modules/govuk-frontend/dist/govuk/assets/rebrand/": "assets/",
     "node_modules/govuk-frontend/dist/govuk/assets/fonts/": "assets/fonts",
-    "src/assets/manifest.json": "manifest.json",
+    "src/assets/rebrand/manifest.json": "manifest.json",
     "src/assets/robots.txt": "robots.txt",
     "src/assets/scripts/cookie-manager.js": "assets/scripts/cookie-manager.js"
   });
