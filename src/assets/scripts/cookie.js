@@ -76,18 +76,24 @@ function sendAnalytics() {
 
   gtag('js', new Date());
 
-  // Send the user_type to GA4 as a user property FIRST
+  // Get user type from localStorage or default to 'external'
   const storedUserType = localStorage.getItem('userType') || 'external';
+
+  // 1. Set user type in Microsoft Clarity (must run after Clarity loads)
+  if (typeof clarity === 'function') {
+    clarity('set', 'user_type', storedUserType);
+  }
+
+  // 2. Set user type in GA4
   gtag('set', { user_properties: { user_type: storedUserType } });
 
-  // Then configure GA
+  // 3. Configure Google Analytics
   gtag('config', 'G-LCRPJR51P6');
 
-  // Load GTM last
+  // 4. Load GTM last (if using GTM as a fallback)
   loadGTM();
 
 }
-
 
 
 // Configuration
