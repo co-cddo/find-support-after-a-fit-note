@@ -71,6 +71,23 @@ function removeAnalytics() {
 }
 
 
+// Set Clarity type
+function setClarityUserType(userType, attempts = 0) {
+
+  if (typeof clarity === 'function') {
+    clarity('set', 'user_type', userType);
+    console.log('Clarity user_type set:', userType);
+  } else if (attempts < 10) {
+    // Retry every 300ms, up to 10 times (~3 seconds total)
+    setTimeout(() => setClarityUserType(userType, attempts + 1), 300);
+  } else {
+    console.warn('Clarity not available after multiple attempts');
+  }
+
+}
+
+
+
 // Send analytics and load tracking
 function sendAnalytics() {
 
@@ -79,18 +96,16 @@ function sendAnalytics() {
   // Get user type from localStorage or default to 'external'
   const storedUserType = localStorage.getItem('userType') || 'external';
 
-  // 1. Set user type in Microsoft Clarity (must run after Clarity loads)
-  if (typeof clarity === 'function') {
-    clarity('set', 'user_type', storedUserType);
-  }
+  // Set user_type in Microsoft Clarity (with retry)
+  setClarityUserType(storedUserType);
 
-  // 2. Set user type in GA4
+  // Set user type in GA4
   gtag('set', { user_properties: { user_type: storedUserType } });
 
-  // 3. Configure Google Analytics
+  // Configure Google Analytics
   gtag('config', 'G-LCRPJR51P6');
 
-  // 4. Load GTM last (if using GTM as a fallback)
+  // Load GTM last (if using GTM as a fallback)
   loadGTM();
 
 }
